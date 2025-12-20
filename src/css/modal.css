@@ -1,0 +1,261 @@
+.modal {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+}
+
+/* modal background */
+.modal .modal-bg {
+    position: absolute;
+    inset: 0;
+    background: rgba(9, 10, 12, 0.86);
+    backdrop-filter: blur(2px);
+    cursor: pointer;
+}
+
+.modal.closing .modal-bg {
+    animation: modal-bg-out 0.2s ease-in forwards;
+}
+
+@keyframes modal-bg-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* modal content */
+.modal .modal-content {
+    position: relative;
+    animation: fade-in 0.25s ease-out forwards;
+    transform-origin: center;
+}
+
+.modal.active .modal-content {
+    animation: modal-in 0.25s ease-out forwards;
+}
+
+.modal.closing .modal-content {
+    animation: modal-out 0.2s ease-in forwards;
+}
+
+@keyframes modal-in {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes modal-out {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+}
+
+/* Close button */
+.modal-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.modal-close::before {
+    content: "\00D7";
+    font-size: 32px;
+    color: rgba(255, 255, 255, 0.85);
+    transition: opacity 0.2s ease;
+}
+
+.modal-close:hover::before {
+    opacity: 0.6;
+}
+
+/* drawer */
+.modal.drawer {
+    justify-content: flex-end;
+}
+
+.modal.drawer .modal-content {
+    width: 100%;
+    max-width: 320px;
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+    animation: slide-in 0.3s ease-out forwards;
+}
+
+.modal.drawer.closing .modal-content {
+    animation: slide-out 0.3s ease-out forwards;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-out {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+/* drawer left */
+.modal.drawer.left {
+    justify-content: flex-start;
+}
+
+.modal.drawer.left .modal-content {
+    animation: slide-in-left 0.3s ease-out forwards;
+}
+
+.modal.drawer.left.closing .modal-content {
+    animation: slide-out-left 0.3s ease-out forwards;
+}
+
+@keyframes slide-in-left {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-out-left {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+/* drawer top */
+.modal.drawer.top.active {
+    align-items: flex-start;
+}
+
+.modal.drawer.top .modal-content {
+    max-width: 100%;
+    height: 50dvh;
+    animation: slide-down 0.3s ease-out forwards;
+}
+
+.modal.drawer.top.closing .modal-content {
+    animation: slide-out-up 0.3s ease-out forwards;
+}
+
+@keyframes slide-down {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-out-up {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-100%);
+    }
+}
+
+/* drawer bottom */
+.modal.drawer.bottom.active {
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.modal.drawer.bottom .modal-content {
+    max-width: 100%;
+    height: 50dvh;
+    animation: slide-up 0.3s ease-out forwards;
+}
+
+.modal.drawer.bottom.closing .modal-content {
+    animation: slide-out-down 0.3s ease-out forwards;
+}
+
+@keyframes slide-up {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-out-down {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(100%);
+    }
+}
+
+/* drawer adaptive */
+.modal.drawer.adaptive {
+    display: none;
+}
+
+.modal.drawer.adaptive.active {
+    display: flex;
+}
+
+@media (min-width: 769px) {
+    .modal.drawer.adaptive {
+        display: flex;
+        position: static;
+        height: auto;
+        width: auto;
+        z-index: auto;
+    }
+
+    .modal.drawer.adaptive .modal-bg {
+        display: none;
+    }
+
+    .modal.drawer.adaptive .modal-content {
+        animation: none !important;
+        position: static;
+        width: auto;
+        height: 100%;
+        max-width: none;
+        overflow: hidden;
+        overflow-y: auto;
+    }
+}

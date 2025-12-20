@@ -1,0 +1,209 @@
+.menu {
+    width: 100%;
+    padding: var(--size-box);
+    border-radius: var(--radius-box);
+    background: hsl(var(--base-200));
+    border: var(--border) solid hsl(var(--base-fg) / 0.11);
+}
+
+.list .label,
+.menu .label {
+    padding-block: 0.35rem;
+    padding-inline: 0.35rem;
+    font-size: 13px;
+    font-weight: 600;
+    color: hsl(var(--base-fg-alt));
+}
+
+.menu li {
+    list-style: none;
+    position: relative;
+}
+
+.menu li :where(summary, button, a) {
+    --bg: 0 0% 0% / 0;
+    --fg: var(--base-fg);
+
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+    border-radius: var(--radius-selector);
+    color: hsl(var(--fg));
+    background: hsl(var(--bg));
+    transition:
+        background-color 0.1s ease,
+        color 0.1s ease,
+        box-shadow 0.1s ease;
+}
+
+/* States */
+.menu li :where(summary, button, a):hover {
+    --bg: var(--base-300);
+}
+
+.menu li :where(summary, button, a).active {
+    --bg: var(--primary);
+    --fg: var(--primary-fg);
+}
+
+.menu li :where(summary, button, a).active:hover {
+    --bg: var(--primary) / 0.9;
+}
+
+/* collapsabe */
+.menu summary {
+    position: relative;
+}
+
+.menu summary {
+    position: relative;
+}
+
+.menu summary::after {
+    content: "";
+    width: 0.4rem;
+    height: 0.4rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-right: 0.5rem;
+    translate: 0 -50%;
+}
+
+.menu details:open > summary::after {
+    transform: rotate(225deg);
+}
+
+/* tree menu */
+.menu li :where(ul) {
+    border-left: var(--border) solid hsl(var(--base-fg) / 0.11);
+    white-space: nowrap;
+    margin: 0.2rem 0 0.2rem 1.2rem;
+    padding-left: 0.3rem;
+}
+
+/* hoverable menu */
+.menu .expander::after {
+    content: "";
+    width: 0.4rem;
+    height: 0.4rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-50%) rotate(-45deg);
+    transition: transform 0.3s ease;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-right: 0.5rem;
+}
+
+.menu .expander > .menu {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin-left: -0.1rem;
+    transform-origin: center left;
+    min-width: max-content;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+    z-index: 1000;
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease;
+}
+
+.menu .expander.left > .menu {
+    left: auto;
+    right: 100%;
+    transform-origin: center right;
+}
+
+.menu .expander:hover > .menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+}
+
+/* menu styles */
+.menu.horizontal {
+    display: flex;
+}
+
+.menu.minimal {
+    background: none;
+    border: none;
+    border-radius: 0;
+}
+
+.menu.context {
+    padding: 10px 0;
+    border: none;
+}
+
+.menu.context li :where(summary, button, a) {
+    border-radius: 0;
+    padding: 5px 10px;
+}
+
+/* list */
+.list {
+    display: flex;
+    flex-direction: column;
+}
+
+.list li {
+    list-style: none;
+    border-bottom: var(--border) solid hsl(var(--base-fg) / 0.11);
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.list .label,
+.list.minimal li,
+.list li:last-child {
+    border: none;
+}
+
+.list li.hoverable:hover,
+.list.hoverable li:hover {
+    background: hsl(var(--base-300));
+    cursor: pointer;
+}
+
+.list.hoverable .label:hover {
+    background: none;
+    cursor: auto;
+}
+
+.list.solid {
+    gap: 0.5rem;
+}
+
+.list.solid li {
+    background: hsl(var(--base-200));
+    border-radius: var(--radius-box);
+    border: var(--border) solid hsl(var(--base-fg) / 0.11);
+}
+
+.list.solid .label {
+    border: none;
+    background: none;
+}
+
+.list.compact li {
+    padding: 8px;
+}

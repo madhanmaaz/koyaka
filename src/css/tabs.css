@@ -1,0 +1,202 @@
+.tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.tabs-list {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    background: hsl(var(--base-200));
+    border-radius: var(--radius-box);
+    border: var(--border) solid hsl(var(--base-fg) / 0.11);
+    overflow-x: auto;
+}
+
+.tab {
+    --bg: transparent;
+    --fg: var(--base-fg-alt);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    padding: 0.45rem 0.75rem;
+    font-size: 14px;
+    font-weight: 500;
+    color: hsl(var(--fg));
+    background: hsl(var(--bg));
+    border-radius: var(--radius-selector);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.tab:hover {
+    --bg: var(--base-300);
+}
+
+.tab.active {
+    --bg: var(--primary);
+    --fg: var(--primary-fg);
+}
+
+/* tabs-content */
+.tabs-content {
+    position: relative;
+    border-radius: var(--radius-box);
+    background: hsl(var(--base-100));
+    border: var(--border) solid hsl(var(--base-fg) / 0.11);
+}
+
+/* tab-panel */
+.tab-panel {
+    padding: 1rem;
+    display: none;
+    animation: tab-fade-in 0.2s ease;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+@keyframes tab-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(2px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Styles */
+.tabs.tabs-grow .tab {
+    flex: 1;
+    justify-content: center;
+}
+
+.tabs.compact .tab {
+    padding: 4px 12px;
+    font-size: 12px;
+}
+
+.tabs.underline .tabs-list {
+    background: none;
+    border: none;
+}
+
+.tabs.underline .tab.active {
+    --bg: transparent;
+    --fg: var(--base-fg);
+}
+
+.tabs.underline .tab.active::after {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: -0.25rem;
+    height: 2px;
+    background: hsl(var(--primary));
+    border-radius: 2px;
+}
+
+.tabs.vertical {
+    flex-direction: row;
+}
+
+.tabs.vertical .tabs-list {
+    flex-direction: column;
+}
+
+.tabs.vertical .tabs-content {
+    width: 100%;
+}
+
+.tabs.reverse {
+    flex-direction: column-reverse;
+}
+
+.tabs.vertical.reverse {
+    flex-direction: row-reverse;
+}
+
+/* dock */
+.dock {
+    background: hsl(var(--base-200));
+    display: flex;
+    align-items: center;
+}
+
+.dock .dock-item {
+    flex: 1;
+    padding: var(--py, 15px) var(--px, 8px);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: var(--gap, 0.5rem);
+    font-size: var(--fs, 11px);
+    color: hsl(var(--base-fg-alt));
+    cursor: pointer;
+}
+
+.dock .dock-item:hover {
+    background: hsl(var(--base-300));
+}
+
+.dock .dock-item.active {
+    color: hsl(var(--primary));
+    background: hsl(var(--base-300));
+}
+
+.dock .dock-item .icon {
+    font-size: var(--icon, 14px);
+}
+
+.dock.xs .dock-item {
+    --py: 6px;
+    --px: 4px;
+    --fs: 10px;
+    --icon: 14px;
+    --gap: 0.25rem;
+}
+
+.dock.sm .dock-item {
+    --py: 10px;
+    --px: 6px;
+    --fs: 11px;
+    --icon: 16px;
+    --gap: 0.35rem;
+}
+
+.dock.md .dock-item {
+    --py: 15px;
+    --px: 8px;
+    --fs: 11px;
+    --icon: 14px;
+    --gap: 0.5rem;
+}
+
+.dock.lg .dock-item {
+    --py: 18px;
+    --px: 10px;
+    --fs: 14px;
+    --icon: 20px;
+    --gap: 0.5rem;
+}
+
+.dock.xl .dock-item {
+    --py: 22px;
+    --px: 12px;
+    --fs: 16px;
+    --icon: 24px;
+    --gap: 0.6rem;
+}

@@ -1,0 +1,48 @@
+/* Box */
+.card,
+.box,
+.selection-control {
+    padding: calc(var(--size-box) + 8px);
+    border-radius: var(--radius-box);
+    background: hsl(var(--base-200));
+    border: var(--border) solid hsl(var(--base-fg) / 0.11);
+}
+
+.box.minimal {
+    border-radius: 0;
+    border: none;
+}
+
+/* card */
+.card {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.card.horizontal {
+    align-items: center;
+    flex-direction: row;
+}
+
+.card .card-image {
+    width: 100%;
+}
+
+.card .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: flex;
+}
+
+.card .card-content {
+    padding: calc(var(--size-box) + 8px);
+}
+
+@media (max-width: 769px) {
+    .card.horizontal {
+        flex-direction: column;
+    }
+}

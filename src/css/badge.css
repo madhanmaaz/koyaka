@@ -1,0 +1,132 @@
+/* badge */
+.badge {
+    --bg: var(--base-300);
+    --fg: var(--base-fg);
+    --p: 4px 8px;
+    --fs: 12px;
+
+    color: hsl(var(--fg));
+    background: hsl(var(--bg));
+    border-radius: var(--radius-selector);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--fs);
+    font-weight: 500;
+    padding: var(--p);
+    white-space: nowrap;
+    user-select: none;
+}
+
+.badge.xs {
+    --fs: 10px;
+    --p: 1px 4px;
+}
+
+.badge.sm {
+    --fs: 11px;
+    --p: 2px 6px;
+}
+
+.badge.md {
+    --fs: 12px;
+    --p: 3px 8px;
+}
+
+.badge.lg {
+    --fs: 14px;
+    --p: 4px 10px;
+}
+
+.badge.xl {
+    --fs: 16px;
+    --p: 5px 12px;
+}
+
+/* soft and outlined */
+.badge.outlined {
+    background: none;
+    color: hsl(var(--bg));
+    border: var(--border) solid hsl(var(--bg));
+}
+
+.badge.soft {
+    background: hsl(var(--bg) / 0.15);
+    color: hsl(var(--bg));
+}
+
+.badge.soft.outlined {
+    border-color: hsl(var(--bg) / 0.25);
+}
+
+.badge.rounded {
+    border-radius: 1000px;
+}
+
+/* ghost */
+.badge.ghost {
+    background: transparent;
+    color: hsl(var(--bg));
+}
+
+.badge.ghost:hover {
+    background: hsl(var(--bg) / 0.1);
+}
+
+.badge.ghost:active {
+    background: hsl(var(--bg) / 0.2);
+}
+
+/* link */
+.badge.link {
+    background: none;
+    color: hsl(var(--bg));
+    padding: 0;
+    border-radius: 0;
+    text-underline-offset: 4px;
+}
+
+.badge.link:hover {
+    text-decoration: underline;
+}
+
+.badge.link:active {
+    opacity: 0.75;
+}
+
+/* Colors */
+.badge.primary {
+    --bg: var(--primary);
+    --fg: var(--primary-fg);
+}
+
+.badge.secondary {
+    --bg: var(--secondary);
+    --fg: var(--secondary-fg);
+}
+
+.badge.accent {
+    --bg: var(--accent);
+    --fg: var(--accent-fg);
+}
+
+.badge.info {
+    --bg: var(--info);
+    --fg: var(--info-fg);
+}
+
+.badge.success {
+    --bg: var(--success);
+    --fg: var(--success-fg);
+}
+
+.badge.warning {
+    --bg: var(--warning);
+    --fg: var(--warning-fg);
+}
+
+.badge.danger {
+    --bg: var(--danger);
+    --fg: var(--danger-fg);
+}

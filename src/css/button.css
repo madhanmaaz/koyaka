@@ -1,0 +1,219 @@
+.button {
+    --px: calc(var(--size-field) + 12px);
+    --py: calc(var(--size-field) + 2px);
+    --fs: 14px;
+    --bg: var(--base-300);
+    --fg: var(--base-fg);
+    --on-bg: var(--fg);
+    --bd-c-a: 0.11;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--px) - 3px);
+    padding: var(--py) var(--px);
+    font-size: var(--fs);
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    transition: all 0.2s ease-in-out;
+    color: hsl(var(--fg));
+    background: hsl(var(--bg));
+    border: var(--border) solid hsl(var(--base-fg) / var(--bd-c-a));
+    border-radius: var(--radius-box);
+}
+
+/* Colors */
+.button.primary {
+    --bg: var(--primary);
+    --fg: var(--primary-fg);
+    --on-bg: var(--bg);
+    --bd-c-a: 0;
+}
+
+.button.secondary {
+    --bg: var(--secondary);
+    --fg: var(--secondary-fg);
+    --on-bg: var(--bg);
+    --bd-c-a: 0;
+}
+
+.button.accent {
+    --bg: var(--accent);
+    --fg: var(--accent-fg);
+    --on-bg: var(--bg);
+    --bd-c-a: 0;
+}
+
+.button.info {
+    --bg: var(--info);
+    --fg: var(--info-fg);
+    --on-bg: var(--bg);
+    --bd-c-a: 0;
+}
+
+.button.success {
+    --bg: var(--success);
+    --fg: var(--success-fg);
+    --on-bg: var(--bg);
+    --bd-c-a: 0;
+}
+
+.button.warning {
+    --bg: var(--warning);
+    --fg: var(--warning-fg);
+    --on-bg: var(--bg);
+    --bd-c-a: 0;
+}
+
+.button.danger {
+    --bg: var(--danger);
+    --fg: var(--danger-fg);
+    --on-bg: var(--bg);
+    --bd-c-a: 0;
+}
+
+/* Sizes */
+.button.xs {
+    --px: 8px;
+    --py: 4px;
+    --fs: 11px;
+}
+
+.button.sm {
+    --px: 12px;
+    --py: 6px;
+    --fs: 13px;
+}
+
+.button.md {
+    --px: 16px;
+    --py: 6px;
+    --fs: 14px;
+}
+
+.button.lg {
+    --px: 20px;
+    --py: 10px;
+    --fs: 18px;
+}
+
+.button.xl {
+    --px: 24px;
+    --py: 12px;
+    --fs: 20px;
+}
+
+/* Styles */
+.button.soft {
+    background-color: hsl(var(--bg) / 0.15);
+    color: hsl(var(--bg));
+    border-color: transparent;
+}
+
+.button.outlined {
+    background: none;
+    color: hsl(var(--bg));
+    border: var(--border) solid hsl(var(--bg));
+}
+
+.button.outlined.soft {
+    border-color: hsl(var(--bg) / 0.3);
+    background-color: hsl(var(--bg) / 0.15);
+}
+
+.button.soft:hover,
+.button.outlined:hover {
+    background: hsl(var(--bg) / 0.25);
+}
+
+.button.rounded {
+    border-radius: 1000px !important;
+}
+
+.button.soft.ghost {
+    background-color: hsl(var(--bg) / 0.15);
+}
+
+/* link and ghost */
+.button.link {
+    background: transparent !important;
+    border-color: transparent;
+    text-underline-offset: 4px;
+    color: hsl(var(--on-bg));
+}
+
+.button.link:hover {
+    text-decoration: underline;
+}
+
+.button.ghost {
+    background: transparent;
+    border-color: transparent;
+    color: hsl(var(--on-bg));
+}
+
+.button.ghost:hover {
+    color: hsl(var(--fg));
+    background: hsl(var(--bg));
+}
+
+@supports (color: color-mix(in lab, red, red)) {
+    .button:hover {
+        background: color-mix(in srgb, hsl(var(--bg)), hsl(var(--base-fg)) 4%);
+    }
+
+    .button:active {
+        background: color-mix(in srgb, hsl(var(--bg)), hsl(var(--base-fg)) 10%);
+    }
+}
+
+.button:disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.button:focus-visible {
+    box-shadow: 0 0 0 0.1875em hsl(var(--bg) / 0.5);
+}
+
+/* Icon */
+.button .icon {
+    margin-inline: calc(var(--px) * -0.29);
+}
+
+.button .icon:first-child:last-child {
+    height: 1.429em;
+    width: 1.1em;
+    margin-inline: calc(var(--px) * -0.5);
+}
+
+.button.xs .icon:first-child:last-child,
+.button.sm .icon:first-child:last-child,
+.button.lg .icon:first-child:last-child,
+.button.xl .icon:first-child:last-child {
+    height: 1.2em;
+    width: 1.2em;
+}
+
+/* Loader */
+.button.loading {
+    pointer-events: none;
+    position: relative;
+    color: transparent !important;
+    opacity: 0.9;
+}
+
+.button.loading::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 2px solid hsl(var(--fg));
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.75s linear infinite;
+}

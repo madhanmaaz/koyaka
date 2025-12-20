@@ -1,0 +1,58 @@
+{
+    "name": "koyaka",
+    "version": "0.0.2",
+    "description": "Koyaka is a lightweight, modern, and highly customizable CSS library.",
+    "homepage": "https://koyaka.netlify.app",
+    "author": {
+        "name": "madhanmaaz",
+        "url": "https://madhanmaaz.netlify.app/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/madhanmaaz/koyaka.git"
+    },
+    "bugs": {
+        "url": "https://github.com/madhanmaaz/koyaka/issues"
+    },
+    "files": [
+        "dist",
+        "LICENSE",
+        "README.md"
+    ],
+    "style": "dist/koyaka.all.min.css",
+    "browser": "./dist/koyaka.all.min.css",
+    "scripts": {
+        "build": "node build.js",
+        "dev": "node build.js --dev"
+    },
+    "license": "MIT",
+    "keywords": [
+        "koyaka",
+        "koyakaUI",
+        "koyakaCss",
+        "css-library",
+        "ui-library",
+        "css-framework",
+        "css-components",
+        "ui-components",
+        "utility-css",
+        "lightweight-css",
+        "modern-css",
+        "responsive-css",
+        "minimal-css",
+        "customizable-css",
+        "design-system",
+        "frontend",
+        "web-design",
+        "web-components",
+        "style-library",
+        "component-library",
+        "ui-kit",
+        "ui-tools",
+        "css-utilities"
+    ],
+    "devDependencies": {
+        "chokidar": "^5.0.0",
+        "clean-css": "^5.3.3"
+    }
+}

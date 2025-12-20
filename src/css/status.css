@@ -1,0 +1,236 @@
+/* status */
+.status {
+    --s: 12px;
+    --bg: var(--base-fg-alt);
+
+    width: var(--s);
+    height: var(--s);
+    background: hsl(var(--bg));
+    border-radius: 50%;
+    border: var(--border) solid hsl(var(--base-100));
+    display: inline-block;
+    position: relative;
+    z-index: 200;
+}
+
+/* Color */
+.status.info {
+    --bg: var(--info);
+}
+
+.status.success {
+    --bg: var(--success);
+}
+
+.status.warning {
+    --bg: var(--warning);
+}
+
+.status.danger {
+    --bg: var(--danger);
+}
+
+/* Size */
+.status.xs {
+    --s: 8px;
+}
+.status.sm {
+    --s: 10px;
+}
+.status.md {
+    --s: 12px;
+}
+.status.lg {
+    --s: 14px;
+}
+.status.xl {
+    --s: 16px;
+}
+
+/* animate */
+.status.animate::before,
+.status.animate::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--s);
+    height: var(--s);
+    background: hsl(var(--bg));
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: status-pulse 2s infinite ease;
+    opacity: 0.1;
+}
+
+.status.animate::after {
+    animation-delay: 1s;
+}
+
+@keyframes status-pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+/* indicator */
+.indicator {
+    position: absolute;
+}
+
+.indicator.tr {
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+}
+
+.indicator.tl {
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+}
+
+.indicator.br {
+    bottom: 0;
+    right: 0;
+    transform: translate(50%, 50%);
+}
+
+.indicator.bl {
+    bottom: 0;
+    left: 0;
+    transform: translate(-50%, 50%);
+}
+
+/* tooltip */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip::before {
+    content: attr(data-tip);
+    border: 1px solid hsl(var(--base-fg) / 0.05);
+    background: hsl(var(--base-300));
+    color: hsl(var(--base-fg-alt));
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.tooltip::before,
+.tooltip .tip {
+    --g: 0.3rem;
+    --scale: 0;
+
+    position: absolute;
+    bottom: calc(100% + var(--g));
+    left: 50%;
+    transform: translateX(-50%) scale(var(--scale));
+    transform-origin: center bottom;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        opacity 0.2s ease,
+        transform 0.07s ease;
+}
+
+.tooltip[data-tip]:hover::before,
+.tooltip:hover .tip {
+    opacity: 1;
+    --scale: 1;
+}
+
+.tooltip.right::before,
+.tooltip.right .tip {
+    left: calc(100% + var(--g));
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%) scale(var(--scale));
+    transform-origin: center left;
+}
+
+.tooltip.left::before,
+.tooltip.left .tip {
+    right: calc(100% + var(--g));
+    left: auto;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%) scale(var(--scale));
+    transform-origin: center right;
+}
+
+.tooltip.bottom::before,
+.tooltip.bottom .tip {
+    top: calc(100% + var(--g));
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%) scale(var(--scale));
+    transform-origin: center top;
+}
+
+/* skeleton */
+.skeleton {
+    background: linear-gradient(
+        100deg,
+        hsl(var(--base-300)) 40%,
+        hsl(var(--base-fg) / 0.2) 50%,
+        hsl(var(--base-300)) 60%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 2s ease-in-out infinite;
+    border-radius: var(--radius-box);
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton-pulse {
+    background: hsl(var(--base-300));
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+.skeleton-text {
+    height: 1em;
+    width: 100%;
+    border-radius: 0.25em;
+}
+
+.skeleton-title {
+    height: 1.4em;
+    width: 60%;
+    border-radius: 0.3em;
+}
+
+.skeleton-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skeleton {
+        animation: none;
+    }
+}

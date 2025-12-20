@@ -1,0 +1,533 @@
+/* group */
+.group {
+    display: flex;
+}
+
+.group > :not(:last-child) {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+}
+
+.group > :not(:first-child) {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+}
+
+/* field */
+.field {
+    display: grid;
+    grid-auto-flow: row;
+    grid-auto-rows: min-content;
+    gap: calc(var(--size-field) + 6px);
+}
+
+.field .label {
+    font-size: 14px;
+    font-weight: 500;
+    color: hsl(var(--base-fg));
+    user-select: none;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    cursor: pointer;
+}
+
+.field .help {
+    font-size: 14px;
+}
+
+/* field-inline */
+.field.field-inline {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+}
+
+.field.field-inline .label {
+    grid-column: 1;
+}
+
+.field.field-inline > :not(.label):not(.help) {
+    grid-column: 2;
+}
+
+.field.field-inline .help {
+    grid-column: 2;
+}
+
+.field.field-inline:has(textarea) {
+    align-items: start;
+}
+
+/* fieldset */
+fieldset legend {
+    background: hsl(var(--base-200));
+    padding: calc(var(--size-field) + 2px) calc(var(--size-field) + 12px);
+    border: var(--border) solid hsl(var(--base-fg) / 0.11);
+    border-radius: var(--radius-field);
+    font-size: 14px;
+}
+
+/* text input */
+.textarea,
+.control,
+.select,
+.input {
+    --bg: var(--base-300);
+    --on-bg: var(--base-fg);
+    --fg: var(--base-fg);
+    --bg-a: 1;
+    --bd-a: 0.11;
+    --p: 4px;
+    --fs: 14px;
+    --bd-rds: 0px;
+
+    font-size: var(--fs);
+    color: hsl(var(--base-fg));
+    background: hsl(var(--bg) / var(--bg-a));
+    padding: calc(var(--size-field) + var(--p));
+    border-radius: calc(var(--radius-field) + var(--bd-rds));
+    border: var(--border) solid hsl(var(--on-bg) / var(--bd-a));
+    width: 100%;
+    transition:
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.control {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--size-field) + var(--p));
+    padding-block: 0;
+    color: hsl(var(--base-fg-alt));
+}
+
+.control :where(.textarea, .select, .input) {
+    padding-inline: 0;
+    border: none;
+    background: none;
+    box-shadow: none !important;
+}
+
+.select option {
+    color: hsl(var(--base-fg));
+    background: hsl(var(--base-200));
+    padding: 0.3rem 0.5rem;
+    border-radius: 5px;
+}
+
+.select option:disabled {
+    color: hsl(var(--base-fg-alt));
+    background: hsl(var(--base-200));
+}
+
+.select[multiple] option {
+    background: transparent;
+    margin-bottom: 0.2rem;
+}
+
+.textarea {
+    transition: none;
+}
+
+/* Styles */
+:where(.textarea, .select, .input).outlined {
+    background: none;
+}
+
+:where(.textarea, .select, .input).solid {
+    border: none;
+    background: hsl(var(--bg));
+    color: hsl(var(--fg));
+}
+
+/* States */
+:where(.textarea, .select, .input):focus-visible,
+.control:focus-within {
+    --bd-a: 0.35;
+    box-shadow: 0 0 0 3px hsl(var(--on-bg) / 0.2);
+}
+
+:where(.textarea, .select, .input):disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 4px,
+        hsl(var(--base-fg) / 0.04) 4px,
+        hsl(var(--base-fg) / 0.04) 8px
+    );
+}
+
+/* Sizes */
+:where(.select, .textarea, .input).xs {
+    --fs: 0.7rem;
+    --p: 1px;
+    --bd-rds: 1px;
+}
+
+:where(.select, .textarea, .input).sm {
+    --fs: 0.9rem;
+    --p: 2px;
+    --bd-rds: 2px;
+}
+
+:where(.select, .textarea, .input).md {
+    --fs: 14px;
+    --p: 4px;
+    --bd-rds: 0px;
+}
+
+:where(.select, .textarea, .input).lg {
+    --fs: 1.125rem;
+    --p: 8px;
+    --bd-rds: 4px;
+}
+
+:where(.select, .textarea, .input).xl {
+    --fs: 1.25rem;
+    --p: 10px;
+    --bd-rds: 6px;
+}
+
+/* checkbox, switch and radio */
+.checkbox,
+.switch,
+.radio {
+    --s: calc(var(--size-selector) + 20px);
+    --bg: var(--base-fg);
+    --fg: var(--base-100);
+
+    -webkit-appearance: none;
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: var(--s);
+    height: var(--s);
+    color: hsl(var(--bg));
+    background: hsl(var(--bg) / 0.2);
+    border: var(--border) solid hsl(var(--bg));
+    border-radius: calc(var(--radius-selector) + 1px);
+}
+
+.checkbox::before,
+.radio::before {
+    content: "";
+    transition: 120ms transform ease-in-out;
+    background: hsl(var(--fg));
+    display: block;
+}
+
+.checkbox {
+    padding: 3px;
+}
+
+.checkbox::before {
+    width: 100%;
+    height: 100%;
+    border-radius: calc(var(--radius-selector) + 1px);
+    clip-path: polygon(20% 100%, 20% 80%, 50% 80%, 50% 0%, 70% 0%, 70% 100%);
+    transform: scale(0) rotate(45deg);
+}
+
+.radio {
+    border-radius: 50%;
+}
+
+.radio::before {
+    content: "";
+    width: 55%;
+    height: 55%;
+    transform: scale(0);
+    border-radius: 50%;
+}
+
+.checkbox:checked,
+.radio:checked {
+    background: hsl(var(--bg));
+}
+
+.checkbox:checked::before {
+    transform: scale(1) rotate(45deg);
+}
+
+.radio:checked::before {
+    transform: scale(1);
+}
+
+/* Switch */
+.switch {
+    width: calc((var(--s) * 2) - 5px);
+    border-radius: 15px;
+    display: inline-grid;
+    grid-template-columns: 0fr 1fr 1fr;
+    transition:
+        grid-template-columns 120ms ease,
+        background 10ms ease;
+}
+
+.switch::before {
+    content: "";
+    width: calc(var(--s) - 9px);
+    height: calc(var(--s) - 9px);
+    background: hsl(var(--bg));
+    border-radius: 15px;
+    grid-row-start: 1;
+    grid-column-start: 2;
+    justify-self: center;
+}
+
+.switch:checked::before {
+    background: hsl(var(--fg));
+}
+
+.switch:checked {
+    background: hsl(var(--bg));
+    grid-template-columns: 1fr 1fr 0fr;
+}
+
+/* Sizes */
+:where(.switch, .radio, .checkbox).xs {
+    --s: calc(var(--size-selector) + 12px);
+}
+
+:where(.switch, .radio, .checkbox).sm {
+    --s: calc(var(--size-selector) + 16px);
+}
+
+:where(.switch, .radio, .checkbox).md {
+    --s: calc(var(--size-selector) + 20px);
+}
+
+:where(.switch, .radio, .checkbox).lg {
+    --s: calc(var(--size-selector) + 24px);
+}
+
+:where(.switch, .radio, .checkbox).xl {
+    --s: calc(var(--size-selector) + 28px);
+}
+
+/* selection-control */
+.selection-control {
+    display: flex;
+    gap: 0.8rem;
+    user-select: none;
+    position: relative;
+}
+
+.selection-control :where(.checkbox, .switch, .radio):checked::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: var(--radius-box);
+    background: hsl(var(--bg) / 0.1);
+    border: var(--border) solid hsl(var(--bg) / 0.5);
+    z-index: 0;
+}
+
+/* Range */
+.range {
+    --bg: var(--base-fg);
+    --h: var(--size-selector);
+    --thumb: calc(8px + var(--h));
+
+    width: 100%;
+    height: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+    font-size: inherit;
+    overflow: hidden;
+}
+
+.range::-webkit-slider-thumb {
+    width: var(--thumb);
+    height: var(--thumb);
+    border-radius: 50%;
+    background: hsl(var(--bg));
+    border-image: linear-gradient(
+            90deg,
+            hsl(var(--bg)) 50%,
+            hsl(var(--base-fg-alt) / 0.15) 0
+        )
+        0 1 / calc(50% - var(--h) / 2) 100vw/0 calc(100vw + 1px);
+    -webkit-appearance: none;
+    appearance: none;
+    transition:
+        background-color 120ms ease,
+        box-shadow 120ms ease,
+        border-image 120ms ease;
+}
+
+.range::-moz-range-thumb {
+    width: var(--thumb);
+    height: var(--thumb);
+    border-radius: 50%;
+    background: hsl(var(--bg));
+    border-image: linear-gradient(
+            90deg,
+            hsl(var(--bg)) 50%,
+            hsl(var(--base-fg-alt) / 0.15) 0
+        )
+        0 1 / calc(50% - var(--h) / 2) 100vw/0 calc(100vw + 1px);
+    -moz-appearance: none;
+    appearance: none;
+    transition:
+        background-color 120ms ease,
+        box-shadow 120ms ease,
+        border-image 120ms ease;
+}
+
+/* Sizes */
+.range.xs {
+    --h: calc(var(--size-selector) - 2px);
+}
+
+.range.sm {
+    --h: calc(var(--size-selector) - 1px);
+}
+
+.range.md {
+    --h: var(--size-selector);
+}
+
+.range.lg {
+    --h: calc(var(--size-selector) + 2px);
+}
+
+.range.xl {
+    --h: calc(var(--size-selector) + 4px);
+}
+
+/* States */
+:where(.switch, .radio, .checkbox, .range):disabled {
+    filter: grayscale(1);
+    cursor: not-allowed;
+}
+
+/* Colors */
+:where(
+    .select,
+    .textarea,
+    .input,
+    .checkbox,
+    .radio,
+    .range,
+    .switch,
+    .control
+).primary {
+    --bg: var(--primary);
+    --fg: var(--primary-fg);
+    --on-bg: var(--bg);
+    --bg-a: 0.1;
+    --bd-a: 0.5;
+}
+
+:where(
+    .select,
+    .textarea,
+    .input,
+    .checkbox,
+    .radio,
+    .range,
+    .switch,
+    .control
+).secondary {
+    --bg: var(--secondary);
+    --fg: var(--secondary-fg);
+    --on-bg: var(--bg);
+    --bg-a: 0.1;
+    --bd-a: 0.5;
+}
+
+:where(
+    .select,
+    .textarea,
+    .input,
+    .checkbox,
+    .radio,
+    .range,
+    .switch,
+    .control
+).accent {
+    --bg: var(--accent);
+    --fg: var(--accent-fg);
+    --on-bg: var(--bg);
+    --bg-a: 0.1;
+    --bd-a: 0.5;
+}
+
+:where(
+    .select,
+    .textarea,
+    .input,
+    .checkbox,
+    .radio,
+    .range,
+    .switch,
+    .control
+).info {
+    --bg: var(--info);
+    --fg: var(--info-fg);
+    --on-bg: var(--bg);
+    --bg-a: 0.1;
+    --bd-a: 0.5;
+}
+
+:where(
+    .select,
+    .textarea,
+    .input,
+    .checkbox,
+    .radio,
+    .range,
+    .switch,
+    .control
+).success {
+    --bg: var(--success);
+    --fg: var(--success-fg);
+    --on-bg: var(--bg);
+    --bg-a: 0.1;
+    --bd-a: 0.5;
+}
+
+:where(
+    .select,
+    .textarea,
+    .input,
+    .checkbox,
+    .radio,
+    .range,
+    .switch,
+    .control
+).warning {
+    --bg: var(--warning);
+    --fg: var(--warning-fg);
+    --on-bg: var(--bg);
+    --bg-a: 0.1;
+    --bd-a: 0.5;
+}
+
+:where(
+    .select,
+    .textarea,
+    .input,
+    .checkbox,
+    .radio,
+    .range,
+    .switch,
+    .control
+).danger {
+    --bg: var(--danger);
+    --fg: var(--danger-fg);
+    --on-bg: var(--bg);
+    --bg-a: 0.1;
+    --bd-a: 0.5;
+}
