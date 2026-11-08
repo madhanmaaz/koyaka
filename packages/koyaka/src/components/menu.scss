@@ -1,0 +1,338 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$menu-sizes: (
+    "xs": (
+        p: 1,
+        rds: 1.5,
+        fs: 0.75,
+    ),
+    "sm": (
+        p: 1.5,
+        rds: 2,
+        fs: 0.8125,
+    ),
+    "md": (
+        p: 2,
+        rds: 2.5,
+        fs: 0.875,
+    ),
+    "lg": (
+        p: 2.5,
+        rds: 3,
+        fs: 0.9375,
+    ),
+    "xl": (
+        p: 3,
+        rds: 3.5,
+        fs: 1,
+    ),
+);
+
+@mixin menu-size($size) {
+    $props: fn.require($menu-sizes, $size);
+
+    --menu_item_p: #{fn.require($props, p)};
+    --menu_item_rds: #{fn.require($props, rds)};
+    --menu_item_fs: #{fn.require($props, fs)};
+}
+
+.menu {
+    @include menu-size("md");
+
+    --menu-item-p: calc(#{vars.$field-size} * var(--menu_item_p));
+    --menu-item-rds: calc(#{vars.$field-radius} * var(--menu_item_rds));
+    --menu-item-fs: calc(1rem * var(--menu_item_fs));
+
+    --menu-clr: #{vars.$theme-fg};
+    --menu-clr-fg: #{vars.$theme-bg-100};
+
+    --menu-item-bg: #{vars.$transparent};
+    --menu-item-fg: #{vars.$theme-fg};
+    --menu-item-bc: #{vars.$transparent};
+
+    display: flex;
+    flex-direction: column;
+    gap: fn.space(1);
+
+    // menu action
+    &-action {
+        display: flex;
+        align-items: center;
+        gap: fn.space(2);
+
+        width: 100%;
+        padding: var(--menu-item-p);
+
+        color: hsl(var(--menu-item-fg));
+        background-color: hsl(var(--menu-item-bg));
+        border-radius: var(--menu-item-rds);
+        border: vars.$border-width solid hsl(var(--menu-item-bc));
+
+        line-height: 1.215;
+        font-size: var(--menu-item-fs);
+        font-family: inherit;
+
+        cursor: pointer;
+        touch-action: manipulation;
+        user-select: none;
+        white-space: nowrap;
+        position: relative;
+
+        transition:
+            background-color 0.12s ease,
+            opacity 0.12s ease;
+
+        svg {
+            width: var(--menu-item-fs);
+            height: var(--menu-item-fs);
+
+            &:not([fill="none"]) {
+                fill: currentColor;
+            }
+        }
+
+        &:not(.active):hover {
+            --menu-item-bg: var(--menu-clr) / 0.07;
+        }
+
+        &:not(.active):active {
+            --menu-item-bg: var(--menu-clr) / 0.1;
+        }
+
+        &:focus-visible {
+            outline: vars.$outline;
+        }
+
+        &.checked::before {
+            content: "\2714";
+            width: calc(var(--menu-item-p) * 1.5);
+            height: calc(var(--menu-item-p) * 1.5);
+            color: hsl(var(--menu-clr));
+            margin-top: -0.25rem;
+        }
+
+        &.active {
+            --menu-item-bg: var(--menu-clr);
+            --menu-item-fg: var(--menu-clr-fg);
+
+            &.soft {
+                --menu-item-bg: var(--menu-clr) / 0.1;
+                --menu-item-fg: var(--menu-clr);
+            }
+
+            &.outline {
+                --menu-item-bg: #{vars.$transparent};
+                --menu-item-fg: var(--menu-clr);
+                --menu-item-bc: var(--menu-clr) / 0.8;
+            }
+
+            &.faded {
+                --menu-item-bg: var(--menu-clr) / 0.1;
+                --menu-item-fg: var(--menu-clr);
+                --menu-item-bc: var(--menu-clr) / 0.3;
+            }
+        }
+
+        &.danger {
+            --menu-clr: #{vars.$theme-error};
+            --menu-clr-fg: #{vars.$theme-error-fg};
+            --menu-item-fg: var(--menu-clr);
+        }
+    }
+
+    // menu-label
+    &-label {
+        padding: calc(var(--menu-item-p) * 0.5) calc(var(--menu-item-p));
+
+        color: hsl(vars.$theme-fg-alt);
+        font-size: calc(var(--menu-item-fs) - 0.14rem);
+        font-weight: 600;
+        text-transform: capitalize;
+        letter-spacing: 0.05em;
+        user-select: none;
+    }
+
+    // menu-separator
+    &-separator {
+        flex-shrink: 0;
+        width: 100%;
+        height: 0;
+        margin: fn.space(1) 0;
+        border-top: vars.$border;
+    }
+
+    &-start {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: fn.space(3);
+
+        min-width: 0;
+    }
+
+    // two-line item: title + description
+    &-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+
+        min-width: 0;
+        text-align: start;
+    }
+
+    &-title {
+        font-weight: 500;
+    }
+
+    &-description {
+        font-size: calc(var(--menu-item-fs) - 0.125rem);
+        line-height: 1.4;
+        white-space: normal;
+        color: inherit;
+        opacity: 0.7;
+    }
+
+    &-end {
+        display: inline-flex;
+        align-items: center;
+        gap: fn.space(1);
+
+        margin-inline-start: auto;
+        font-size: 0.75rem;
+    }
+
+    // menu-tree
+    &-tree {
+        display: flex;
+        flex-direction: column;
+        gap: fn.space(1);
+
+        border-inline-start: vars.$border;
+        margin: 0.2rem 0;
+        margin-inline-start: 1rem;
+        padding-inline-start: 0.375rem;
+    }
+
+    // collapsible
+    summary.menu-action {
+        padding-inline-end: 1.8rem;
+    }
+
+    summary.menu-action::-webkit-details-marker {
+        display: none;
+    }
+
+    summary.menu-action::after {
+        content: "";
+        width: 0.35rem;
+        height: 0.35rem;
+        border-right: 0.0875rem solid currentColor;
+        border-bottom: 0.0875rem solid currentColor;
+        transform: translateY(-50%) rotate(45deg);
+        transition: transform 0.2s ease;
+
+        position: absolute;
+        top: 50%;
+        inset-inline-end: var(--menu-item-p);
+        flex-shrink: 0;
+    }
+
+    details[open] > summary.menu-action {
+        --menu-item-bg: var(--menu-clr) / 0.07;
+
+        &::after {
+            transform: translateY(-50%) rotate(225deg);
+        }
+    }
+
+    // popover
+    .menu-popover > .menu-popover-trigger {
+        padding-inline-end: 1.5rem;
+    }
+
+    .menu-popover > .menu-popover-trigger::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        inset-inline-end: 0.5rem;
+        transform: translateY(-50%) rotate(45deg);
+        padding: 0.15rem;
+
+        border-width: fn.to-rem(2px) fn.to-rem(2px) 0 0;
+        border-style: solid;
+        border-color: hsl(var(--menu-item-fg) / 0.5);
+        border-radius: fn.to-rem(2px);
+    }
+
+    .menu-popover.active > .menu-popover-trigger {
+        --menu-item-bg: var(--menu-clr) / 0.07;
+    }
+
+    .menu-popover-content {
+        display: none;
+        flex-direction: column;
+        gap: fn.space(1);
+
+        position: absolute;
+        z-index: fn.zindex("menu-popover");
+    }
+
+    .menu-popover.active > .menu-popover-content {
+        display: flex;
+    }
+
+    &.surface,
+    .menu-popover-content {
+        border: vars.$border;
+        padding: calc(#{vars.$box-size} * 0.5);
+        border-radius: calc(#{vars.$box-radius} * 1.5);
+        background-color: hsl(vars.$theme-bg-200);
+    }
+
+    // horizontal layout
+    &.horizontal {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+
+        .menu-action {
+            width: auto;
+        }
+
+        .menu-separator {
+            align-self: stretch;
+            width: auto;
+            height: auto;
+            margin: 0 fn.space(1);
+            border-top: 0;
+            border-inline-start: vars.$border;
+        }
+    }
+
+    // sizes
+    @include mixins.each-size($menu-sizes) using ($name, $value) {
+        @include menu-size($name);
+    }
+
+    // colors
+    @include mixins.each-color("menu");
+
+    // reduced motion
+    @include mixins.reduced-motion {
+        &-action,
+        summary.menu-action::after {
+            transition: none;
+        }
+    }
+}
+
+[data-target-context-menu] {
+    position: fixed;
+    z-index: fn.zindex("context-menu");
+
+    &:not(.active) {
+        display: none;
+    }
+}

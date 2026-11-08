@@ -1,0 +1,39 @@
+{
+    "name": "koyaka-vanilla",
+    "version": "0.0.1",
+    "description": "Koyaka vanilla -Javascript support for koyaka.",
+    "license": "MIT",
+    "funding": "https://github.com/madhanmaaz/koyaka?sponsor=1",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/madhanmaaz/koyaka.git",
+        "directory": "packages/vanilla"
+    },
+    "author": {
+        "name": "madhanmaaz",
+        "url": "https://madhanmaaz.netlify.app/"
+    },
+    "files": [
+        "dist",
+        "license",
+        "readme.md"
+    ],
+    "keywords": [
+        "koyaka",
+        "koyaka-ui",
+        "vanilla-js",
+        "javascript",
+        "ui-library",
+        "component-library",
+        "frontend",
+        "css",
+        "ui-components",
+        "design-system",
+        "lightweight",
+        "modern-ui",
+        "web-components",
+        "no-framework",
+        "minimal",
+        "customizable"
+    ]
+}

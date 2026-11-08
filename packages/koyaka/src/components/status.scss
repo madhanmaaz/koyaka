@@ -1,0 +1,78 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$status-sizes: (
+    "xs": 2,
+    "sm": 2.5,
+    "md": 3,
+    "lg": 3.5,
+    "xl": 5,
+);
+
+.status {
+    --status_size: #{fn.require($status-sizes, "md")};
+
+    --status-size: calc(#{vars.$ctrl-size} * var(--status_size));
+    --status-bg: var(--status-clr, #{vars.$theme-neutral});
+    --status-fg: var(--status-clr-fg, #{vars.$theme-bg-100});
+
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    width: var(--status-size);
+    height: var(--status-size);
+
+    color: hsl(var(--status-fg));
+    background-color: hsl(var(--status-bg));
+    border-radius: 50%;
+    font-size: calc(var(--status-size) * 0.8);
+
+    // pulse
+    &.animate::before,
+    &.animate::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+
+        background-color: hsl(var(--status-bg));
+        border-radius: 50%;
+        opacity: 0;
+
+        animation: status-pulse 2s infinite ease;
+    }
+
+    &.animate::after {
+        animation-delay: 1s;
+    }
+
+    // the pulse is decorative, so drop it entirely
+    @include mixins.reduced-motion {
+        &.animate::before,
+        &.animate::after {
+            display: none;
+        }
+    }
+
+    // sizes
+    @include mixins.each-size($status-sizes) using ($name, $size) {
+        --status_size: #{$size};
+    }
+
+    // colors
+    @include mixins.each-color("status");
+}
+
+@keyframes status-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}

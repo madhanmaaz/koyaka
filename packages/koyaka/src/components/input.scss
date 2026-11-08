@@ -1,0 +1,164 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$input-sizes: (
+    "xs": (
+        py: 1.25,
+        px: 1.5,
+        rds: 2,
+        fs: 0.75,
+    ),
+    "sm": (
+        py: 1.5,
+        px: 2,
+        rds: 2.25,
+        fs: 0.8125,
+    ),
+    "md": (
+        py: 1.75,
+        px: 2.5,
+        rds: 2.5,
+        fs: 0.875,
+    ),
+    "lg": (
+        py: 2,
+        px: 3,
+        rds: 2.75,
+        fs: 1,
+    ),
+    "xl": (
+        py: 2.25,
+        px: 3.5,
+        rds: 3,
+        fs: 1.125,
+    ),
+);
+
+@mixin input-size($size) {
+    $props: fn.require($input-sizes, $size);
+
+    --input_py: #{fn.require($props, py)};
+    --input_px: #{fn.require($props, px)};
+    --input_rds: #{fn.require($props, rds)};
+    --input_fs: #{fn.require($props, fs)};
+}
+
+.control,
+.input,
+.select,
+.textarea {
+    @include input-size("md");
+
+    --input-bg: var(--input-clr, #{vars.$theme-bg-300});
+    --input-fg: var(--input-clr-fg, #{vars.$theme-fg});
+    --input-bc: var(--input-clr, #{vars.$border-color});
+
+    --input-py: calc(#{vars.$field-size} * var(--input_py));
+    --input-px: calc(#{vars.$field-size} * var(--input_px));
+    --input-rds: calc(#{vars.$field-radius} * var(--input_rds));
+    --input-fs: calc(1rem * var(--input_fs));
+
+    font-size: var(--input-fs);
+    color: hsl(var(--input-fg));
+    background-color: hsl(var(--input-bg));
+
+    padding: var(--input-py) var(--input-px);
+    border-radius: var(--input-rds);
+    border: vars.$border-width solid hsl(var(--input-bc));
+
+    line-height: 1;
+    width: 100%;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease;
+
+    @include mixins.reduced-motion {
+        transition: none;
+    }
+
+    :where(&).soft {
+        --input-bg: var(--input-clr, #{vars.$theme-fg}) / 0.1;
+        --input-fg: var(--input-clr, #{vars.$theme-fg});
+        --input-bc: #{vars.$transparent};
+    }
+
+    :where(&).outline {
+        --input-bg: #{vars.$transparent};
+        --input-fg: var(--input-clr, #{vars.$theme-fg});
+        --input-bc: var(--input-clr, #{vars.$theme-fg});
+    }
+
+    :where(&).faded {
+        --input-bg: var(--input-clr, #{vars.$theme-fg}) / 0.1;
+        --input-fg: var(--input-clr, #{vars.$theme-fg});
+        --input-bc: var(--input-clr, #{vars.$theme-fg}) / 0.3;
+    }
+
+    // sizes and colors, wrapped in :where() so specificity stays low
+    :where(&) {
+        @include mixins.each-size($input-sizes) using ($name, $value) {
+            @include input-size($name);
+        }
+
+        @include mixins.each-color("input");
+    }
+}
+
+:where(.input, .select, .textarea)::placeholder,
+.control :where(input, select, textarea)::placeholder {
+    color: hsl(var(--input-fg) / 0.5);
+}
+
+:where(.control, .input, .select, .textarea):focus-within {
+    --input-bc: var(--input-clr, #{vars.$theme-fg-alt}) / 0.8;
+    box-shadow: 0 0 0 vars.$border-width hsl(var(--input-bc));
+}
+
+// control
+.control {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--input-px);
+
+    padding-block: 0;
+
+    :where(input, select, textarea) {
+        flex: 1;
+
+        font-size: var(--input-fs);
+        color: hsl(var(--input-fg));
+
+        padding-block: var(--input-py);
+        line-height: 1.286;
+        min-width: 0;
+    }
+}
+
+// select
+.select option,
+.control select option {
+    color: hsl(vars.$theme-fg);
+    background-color: hsl(vars.$theme-bg-200);
+    padding: fn.space(1) fn.space(2);
+    border-radius: vars.$ctrl-radius;
+
+    &:disabled {
+        color: hsl(vars.$theme-fg-alt);
+        background-color: hsl(vars.$theme-bg-200);
+    }
+}
+
+.select[multiple] option,
+.control select[multiple] option {
+    background-color: transparent;
+    margin-bottom: fn.space(1);
+}
+
+// textarea
+.textarea,
+.control textarea {
+    line-height: 1.5;
+    resize: vertical;
+}

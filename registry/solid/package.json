@@ -1,0 +1,20 @@
+{
+    "name": "solid",
+    "version": "0.0.1",
+    "description": "Koyaka for solidJS",
+    "license": "MIT",
+    "funding": "https://github.com/madhanmaaz/koyaka?sponsor=1",
+    "author": {
+        "name": "madhanmaaz",
+        "url": "https://madhanmaaz.netlify.app/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/madhanmaaz/koyaka.git",
+        "directory": "registry/solid"
+    },
+    "bugs": {
+        "url": "https://github.com/madhanmaaz/koyaka/issues"
+    },
+    "keywords": []
+}

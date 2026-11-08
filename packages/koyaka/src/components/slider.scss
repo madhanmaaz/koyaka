@@ -1,0 +1,161 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$slider-sizes: (
+    "xs": 0.5,
+    "sm": 0.75,
+    "md": 1,
+    "lg": 1.25,
+    "xl": 1.5,
+);
+
+// vendor pseudo-elements can't share a selector list, so the shared part lives here
+@mixin slider-thumb {
+    width: var(--slider-thumb);
+    height: var(--slider-thumb);
+    border-radius: 50%;
+    background-color: hsl(var(--slider-clr));
+}
+
+.slider {
+    --slider_h: #{fn.require($slider-sizes, "md")};
+
+    --slider-h: calc(#{vars.$ctrl-size} * var(--slider_h));
+    --slider-clr: #{vars.$theme-fg};
+    --slider-track: #{vars.$theme-fg} / 0.15;
+    --slider-thumb: calc(var(--slider-h) + 0.5rem);
+
+    // a 12px thumb is a small target for a finger
+    @media (pointer: coarse) {
+        --slider-thumb: calc(var(--slider-h) + 1rem);
+    }
+
+    // native <input type="range">
+    &:is(input) {
+        -webkit-appearance: none;
+        appearance: none;
+
+        width: 100%;
+        overflow: hidden; // clips the 100vw fill extension (webkit)
+        border-radius: vars.$box-radius;
+        cursor: pointer;
+
+        &:focus-visible {
+            outline: vars.$outline;
+            outline-offset: vars.$outline-width;
+        }
+
+        // webkit has no fill pseudo-element, so the thumb paints the track via border-image
+        &::-webkit-slider-thumb {
+            @include slider-thumb;
+
+            -webkit-appearance: none;
+            appearance: none;
+            border-image: linear-gradient(
+                    90deg,
+                    hsl(var(--slider-clr)) 50%,
+                    hsl(var(--slider-track)) 0
+                )
+                0 1 / calc(50% - var(--slider-h) / 2) 100vw / 0
+                calc(100vw + 1px);
+        }
+
+        // firefox has real track and progress pseudo-elements
+        &::-moz-range-thumb {
+            @include slider-thumb;
+
+            border: 0;
+        }
+
+        &::-moz-range-track {
+            height: var(--slider-h);
+            border-radius: inherit;
+            background-color: hsl(var(--slider-track));
+        }
+
+        &::-moz-range-progress {
+            height: var(--slider-h);
+            border-radius: inherit;
+            background-color: hsl(var(--slider-clr));
+        }
+    }
+
+    // custom (JS-driven) slider: any element that isn't an input
+    &:not(input) {
+        position: relative;
+        height: var(--slider-h);
+        border-radius: vars.$box-radius;
+        background-color: hsl(var(--slider-track));
+    }
+
+    &-fill {
+        position: absolute;
+        top: 0;
+        height: var(--slider-h);
+        border-radius: inherit;
+        background-color: hsl(var(--slider-clr));
+    }
+
+    &-thumb {
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+
+        @include slider-thumb;
+
+        cursor: pointer;
+        transition: box-shadow 0.15s ease;
+
+        &:active {
+            box-shadow: 0 0 0 1px hsl(var(--slider-clr));
+        }
+
+        &:focus-visible {
+            outline: vars.$outline;
+            outline-offset: vars.$outline-width;
+        }
+    }
+
+    // step dots
+    &-steps {
+        position: absolute;
+        inset-inline: 0;
+        top: 50%;
+        transform: translateY(-50%);
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        pointer-events: none;
+    }
+
+    &-step {
+        width: calc(var(--slider-h) * 0.7);
+        height: calc(var(--slider-h) * 0.7);
+        border-radius: 50%;
+        background-color: hsl(var(--slider-clr));
+
+        // end dots sit under the thumb at 0% and 100%
+        &:first-child,
+        &:last-child {
+            opacity: 0;
+        }
+    }
+
+    @include mixins.reduced-motion {
+        &-thumb {
+            transition: none;
+        }
+    }
+
+    // sizes
+    @include mixins.each-size($slider-sizes) using ($name, $value) {
+        --slider_h: #{$value};
+    }
+
+    // colors
+    @include mixins.each-color("slider");
+}

@@ -1,0 +1,87 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+.label {
+    display: inline-flex;
+    align-items: center;
+    gap: fn.space(2);
+
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25;
+
+    color: hsl(vars.$theme-fg);
+    user-select: none;
+    cursor: pointer;
+
+    &-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: fn.space(1);
+        min-width: 0;
+    }
+
+    &-title {
+        line-height: 1.2;
+    }
+
+    &-description {
+        font-size: 0.8125rem;
+        color: hsl(vars.$theme-fg-alt);
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    &.required::after {
+        content: "*";
+        color: hsl(vars.$theme-error);
+        font-weight: 500;
+    }
+
+    &.optional::after {
+        content: var(--label-text, "(optional)");
+        font-size: 0.8em;
+        font-weight: 400;
+        color: hsl(vars.$theme-fg-alt);
+    }
+
+    &.surface {
+        display: flex;
+        align-items: flex-start;
+
+        padding: calc(#{vars.$box-size} * 1.5);
+        border: vars.$border;
+        background-color: hsl(vars.$theme-bg-200);
+        border-radius: calc(#{vars.$box-radius} * 1.5);
+
+        touch-action: manipulation;
+
+        transition:
+            border-color 0.15s ease,
+            background-color 0.15s ease;
+
+        @include mixins.reduced-motion {
+            transition: none;
+        }
+
+        &:is(:hover, .hovered) {
+            border-color: hsl(var(--label-clr, #{vars.$theme-fg}) / 0.2);
+            background-color: hsl(var(--label-clr, #{vars.$theme-fg}) / 0.05);
+        }
+
+        &:is(.active, :has(:checked)) {
+            border-color: hsl(var(--label-clr, #{vars.$theme-fg}) / 0.3);
+            background-color: hsl(var(--label-clr, #{vars.$theme-fg}) / 0.1);
+        }
+
+        &:is(.active, :has(:checked)):is(:hover, .hovered) {
+            border-color: hsl(var(--label-clr, #{vars.$theme-fg}) / 0.45);
+            background-color: hsl(var(--label-clr, #{vars.$theme-fg}) / 0.15);
+        }
+    }
+
+    // colors
+    @include mixins.each-color("label");
+}

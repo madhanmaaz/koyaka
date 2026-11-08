@@ -1,0 +1,187 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$list-sizes: (
+    "xs": (
+        py: 1,
+        px: 1.5,
+        fs: 0.75,
+    ),
+    "sm": (
+        py: 1.5,
+        px: 2,
+        fs: 0.8125,
+    ),
+    "md": (
+        py: 2,
+        px: 3,
+        fs: 0.875,
+    ),
+    "lg": (
+        py: 3,
+        px: 4,
+        fs: 1,
+    ),
+    "xl": (
+        py: 4,
+        px: 5,
+        fs: 1.0625,
+    ),
+);
+
+@mixin list-size($size) {
+    $props: fn.require($list-sizes, $size);
+
+    --list_item_py: #{fn.require($props, py)};
+    --list_item_px: #{fn.require($props, px)};
+    --list_item_fs: #{fn.require($props, fs)};
+}
+
+.list {
+    @include list-size("md");
+
+    --list-item-py: calc(#{vars.$field-size} * var(--list_item_py));
+    --list-item-px: calc(#{vars.$field-size} * var(--list_item_px));
+    --list-item-fs: calc(1rem * var(--list_item_fs));
+    --list-item-bg: #{vars.$transparent};
+    --list-item-fg: #{vars.$theme-fg};
+
+    display: flex;
+    flex-direction: column;
+    border-radius: calc(#{vars.$box-radius} * 1.5);
+
+    &-item {
+        background-color: hsl(var(--list-item-bg));
+        color: hsl(var(--list-item-fg));
+        padding: var(--list-item-py) var(--list-item-px);
+        font-size: var(--list-item-fs);
+        text-align: start;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: fn.space(4);
+
+        transition: background-color 0.15s ease;
+
+        @include mixins.reduced-motion {
+            transition: none;
+        }
+
+        &:focus-visible {
+            outline: vars.$outline;
+            outline-offset: calc(#{vars.$outline-width} * -1);
+        }
+    }
+
+    // dividers (not for split cards)
+    &:not(.split) &-item:not(:last-child) {
+        border-bottom: vars.$border;
+    }
+
+    &.horizontal:not(.split) &-item:not(:last-child) {
+        border-bottom: none;
+        border-inline-end: vars.$border;
+    }
+
+    &-label {
+        flex-shrink: 0;
+        padding: var(--list-item-py) var(--list-item-px);
+        color: hsl(vars.$theme-fg-alt);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    &-start {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: fn.space(3);
+
+        min-width: 0;
+    }
+
+    &-content {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: fn.space(1);
+    }
+
+    &-end {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: fn.space(3);
+
+        color: hsl(vars.$theme-fg-alt);
+        font-size: 0.8125rem;
+    }
+
+    &-title {
+        font-weight: 500;
+        line-height: 1.4;
+    }
+
+    &-description {
+        font-size: 0.8125rem;
+        color: hsl(vars.$theme-fg-alt);
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    &.hoverable &-item {
+        cursor: pointer;
+        user-select: none;
+        touch-action: manipulation;
+    }
+
+    @media (hover: hover) {
+        &.hoverable &-item:hover {
+            --list-item-bg: #{vars.$theme-fg} / 0.06;
+        }
+
+        &.split.hoverable &-item:hover {
+            --list-item-bg: #{vars.$theme-bg-300};
+        }
+    }
+
+    &.hoverable &-item:active {
+        --list-item-bg: #{vars.$theme-fg} / 0.1;
+    }
+
+    &.split.hoverable &-item:active {
+        --list-item-bg: #{vars.$theme-bg-400};
+    }
+
+    &.surface {
+        background-color: hsl(vars.$theme-bg-200);
+        border: vars.$border;
+        overflow: hidden;
+    }
+
+    &.split {
+        gap: fn.space(2);
+    }
+
+    &.split &-item {
+        --list-item-bg: #{vars.$theme-bg-200};
+
+        border-radius: calc(#{vars.$box-radius} * 1.5);
+        border: vars.$border;
+    }
+
+    &.horizontal {
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    // sizes
+    @include mixins.each-size($list-sizes) using ($name, $value) {
+        @include list-size($name);
+    }
+}

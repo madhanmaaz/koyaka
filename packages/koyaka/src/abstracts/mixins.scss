@@ -1,0 +1,84 @@
+@use "sass:list";
+@use "sass:map";
+
+@use "variables" as vars;
+@use "functions" as fn;
+
+@mixin surface {
+    background-color: hsl(vars.$theme-bg-200);
+    border: vars.$border;
+    border-radius: calc(vars.$box-radius * 1.5);
+}
+
+@mixin reduced-motion {
+    @media (prefers-reduced-motion: reduce) {
+        @content;
+    }
+}
+
+@mixin rtl {
+    [dir="rtl"] & {
+        @content;
+    }
+}
+
+@mixin breakpoint-up($name) {
+    @media (min-width: fn.breakpoint($name)) {
+        @content;
+    }
+}
+
+@mixin breakpoint-down($name) {
+    @media (max-width: (fn.breakpoint($name) - 0.0625rem)) {
+        @content;
+    }
+}
+
+@mixin each-size($map) {
+    @each $name, $value in $map {
+        &.#{$name} {
+            @content ($name, $value);
+        }
+    }
+}
+
+@mixin each-color($component, $selector: "&", $colors: vars.$colors) {
+    @each $color in $colors {
+        #{$selector}.#{$color} {
+            --#{$component}-clr: var(--#{$color});
+            --#{$component}-clr-fg: var(--#{$color}-fg);
+
+            @content ($color);
+        }
+    }
+}
+
+@mixin create-theme($theme) {
+    @each $key, $values in $theme {
+        @if $key == "bg" {
+            @if list.length($values) != 4 {
+                @error "create-theme: `bg` needs 4 triplets, got #{list.length($values)}.";
+            }
+
+            @for $i from 1 through 4 {
+                --bg-#{$i * 100}: #{list.nth($values, $i)};
+            }
+        } @else if $key == "fg" {
+            @if list.length($values) != 2 {
+                @error "create-theme: `fg` needs 2 triplets (fg, fg-alt), got #{list.length($values)}.";
+            }
+
+            --fg: #{list.nth($values, 1)};
+            --fg-alt: #{list.nth($values, 2)};
+        } @else if list.index(vars.$colors, $key) {
+            @if list.length($values) != 2 {
+                @error "create-theme: `#{$key}` needs 2 triplets (color, color-fg), got #{list.length($values)}.";
+            }
+
+            --#{$key}: #{list.nth($values, 1)};
+            --#{$key}-fg: #{list.nth($values, 2)};
+        } @else {
+            @error "create-theme: unknown key `#{$key}`. Use bg, fg or one of: #{vars.$colors}.";
+        }
+    }
+}

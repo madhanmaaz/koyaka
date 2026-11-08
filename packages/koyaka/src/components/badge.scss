@@ -1,0 +1,186 @@
+@use "sass:map";
+
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$badge-sizes: (
+    "xs": (
+        py: 0.25,
+        px: 1,
+        rds: 2,
+        fs: 0.625,
+    ),
+    "sm": (
+        py: 0.5,
+        px: 1.5,
+        rds: 2,
+        fs: 0.6875,
+    ),
+    "md": (
+        py: 0.75,
+        px: 1.5,
+        rds: 2.5,
+        fs: 0.75,
+    ),
+    "lg": (
+        py: 1.25,
+        px: 3,
+        rds: 3,
+        fs: 0.875,
+    ),
+    "xl": (
+        py: 1.5,
+        px: 3.5,
+        rds: 3.5,
+        fs: 1,
+    ),
+);
+
+@mixin badge-size($size) {
+    $props: fn.require($badge-sizes, $size);
+
+    --badge_py: #{fn.require($props, py)};
+    --badge_px: #{fn.require($props, px)};
+    --badge_rds: #{fn.require($props, rds)};
+    --badge_fs: #{fn.require($props, fs)};
+}
+
+.badge {
+    @include badge-size("md");
+
+    --badge-bg: var(--badge-clr, #{vars.$theme-bg-300});
+    --badge-fg: var(--badge-clr-fg, #{vars.$theme-fg-alt});
+    --badge-bc: #{vars.$transparent};
+
+    --badge-py: calc(#{vars.$ctrl-size} * var(--badge_py));
+    --badge-px: calc(#{vars.$ctrl-size} * var(--badge_px));
+    --badge-rds: calc(#{vars.$ctrl-radius} * var(--badge_rds));
+    --badge-fs: calc(1rem * var(--badge_fs));
+    --badge-gap: calc(var(--badge-px) * 0.75);
+
+    border: vars.$border-width solid hsl(var(--badge-bc));
+    background-color: hsl(var(--badge-bg));
+    border-radius: var(--badge-rds);
+    color: hsl(var(--badge-fg));
+    padding: var(--badge-py) var(--badge-px);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--badge-gap);
+
+    font-size: var(--badge-fs);
+    font-weight: 500;
+    white-space: nowrap;
+    user-select: none;
+    line-height: 1;
+
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        opacity 0.15s ease;
+
+    @include mixins.reduced-motion {
+        transition: none;
+    }
+
+    &:focus-visible {
+        outline: vars.$outline;
+    }
+
+    // soft and ghost-soft
+    &.soft,
+    &.ghost-soft:hover {
+        --badge-bg: var(--badge-clr, #{vars.$theme-fg-alt}) / 0.1;
+        --badge-fg: var(--badge-clr, #{vars.$theme-fg-alt});
+        --badge-bc: #{vars.$transparent};
+    }
+
+    // outline and ghost-outline
+    &.outline,
+    &.ghost-outline:hover {
+        --badge-bg: #{vars.$transparent};
+        --badge-fg: var(--badge-clr, #{vars.$theme-fg-alt});
+        --badge-bc: var(--badge-clr, #{vars.$theme-fg-alt}) / 0.8;
+    }
+
+    // faded and ghost-faded
+    &.faded,
+    &.ghost-faded:hover {
+        --badge-bg: var(--badge-clr, #{vars.$theme-fg-alt}) / 0.1;
+        --badge-fg: var(--badge-clr, #{vars.$theme-fg-alt});
+        --badge-bc: var(--badge-clr, #{vars.$theme-fg-alt}) / 0.3;
+    }
+
+    // ghost
+    &.ghost,
+    &.ghost-soft,
+    &.ghost-outline,
+    &.ghost-faded {
+        --badge-bg: #{vars.$transparent};
+        --badge-fg: var(--badge-clr, #{vars.$theme-fg-alt});
+        --badge-bc: #{vars.$transparent};
+
+        cursor: pointer;
+    }
+
+    &.ghost:hover {
+        --badge-bg: var(--badge-clr, #{vars.$theme-fg-alt});
+        --badge-fg: var(--badge-clr-fg, #{vars.$theme-bg-100});
+        --badge-bc: #{vars.$transparent};
+    }
+
+    // link
+    &.link {
+        --badge-bg: #{vars.$transparent};
+        --badge-fg: var(--badge-clr, #{vars.$theme-fg-alt});
+        --badge-bc: #{vars.$transparent};
+
+        text-underline-offset: 4px;
+        cursor: pointer;
+    }
+
+    &.link:hover {
+        text-decoration: underline;
+    }
+
+    &.hoverable {
+        cursor: pointer;
+    }
+
+    &.hoverable:hover {
+        opacity: 0.85;
+    }
+
+    &:where(.ghost, .ghost-soft, .ghost-outline, .ghost-faded):active,
+    &.link:active,
+    &.hoverable:active {
+        opacity: 0.7;
+    }
+
+    // icon
+    .icon:only-child {
+        height: 1em;
+        width: 1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-inline: calc(var(--badge-py) - var(--badge-px));
+    }
+
+    .icon svg {
+        width: var(--badge-fs);
+        height: var(--badge-fs);
+        fill: hsl(var(--badge-fg));
+    }
+
+    // sizes
+    @include mixins.each-size($badge-sizes) using ($name, $value) {
+        @include badge-size($name);
+    }
+
+    // colors
+    @include mixins.each-color("badge");
+}

@@ -1,0 +1,54 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+
+.divider {
+    --divider_size: 1;
+
+    --divider-size: calc(1px * var(--divider_size));
+
+    width: 100%;
+    margin: fn.space(2) 0;
+    display: inline-flex;
+    align-items: center;
+
+    font-size: 0.75em;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    color: hsl(vars.$theme-fg-alt);
+
+    &:not(:empty) {
+        gap: fn.space(3);
+    }
+
+    &::before,
+    &::after {
+        content: "";
+        flex: 1;
+        flex-shrink: 0;
+        height: var(--divider-size);
+        background-color: hsl(vars.$border-color);
+    }
+
+    &.start::before {
+        content: none;
+    }
+
+    &.end::after {
+        content: none;
+    }
+
+    &.vertical {
+        flex-direction: column;
+        width: var(--divider-size);
+        height: 100%;
+        margin: 0 fn.space(2);
+
+        &::before,
+        &::after {
+            width: var(--divider-size);
+            height: auto;
+            flex: 1;
+        }
+    }
+}

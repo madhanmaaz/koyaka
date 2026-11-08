@@ -1,0 +1,302 @@
+@use "sass:list";
+@use "sass:map";
+
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$btn-sizes: (
+    "xs": (
+        py: 1,
+        px: 1,
+        rds: 1.5,
+        fs: 0.75,
+    ),
+    "sm": (
+        py: 1.5,
+        px: 2,
+        rds: 2,
+        fs: 0.8125,
+    ),
+    "md": (
+        py: 2,
+        px: 3,
+        rds: 2.5,
+        fs: 0.875,
+    ),
+    "lg": (
+        py: 2.5,
+        px: 4,
+        rds: 3,
+        fs: 1,
+    ),
+    "xl": (
+        py: 3,
+        px: 5,
+        rds: 3.5,
+        fs: 1.0625,
+    ),
+);
+
+// breakpoints where .responsive steps down (above these it stays at .xl)
+$btn-responsive-steps: ("lg", "md", "sm", "xs");
+
+@mixin btn-size($size) {
+    $props: fn.require($btn-sizes, $size);
+
+    --btn_py: #{fn.require($props, py)};
+    --btn_px: #{fn.require($props, px)};
+    --btn_rds: #{fn.require($props, rds)};
+    --btn_fs: #{fn.require($props, fs)};
+}
+
+@keyframes btn-loading {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.btn {
+    @include btn-size("md");
+
+    --btn-bg: var(--btn-clr, #{vars.$theme-bg-300});
+    --btn-fg: var(--btn-clr-fg, #{vars.$theme-fg-alt});
+    --btn-bc: var(--btn-clr, #{vars.$border-color});
+
+    --btn-py: calc(#{vars.$field-size} * var(--btn_py));
+    --btn-px: calc(#{vars.$field-size} * var(--btn_px));
+    --btn-rds: calc(#{vars.$field-radius} * var(--btn_rds));
+    --btn-fs: calc(1rem * var(--btn_fs));
+    --btn-gap: var(--btn-py);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--btn-gap);
+
+    font-size: var(--btn-fs);
+    font-family: inherit;
+    font-weight: 500;
+
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    line-height: 1;
+    touch-action: manipulation;
+
+    padding: var(--btn-py) var(--btn-px);
+    color: hsl(var(--btn-fg));
+    background-color: hsl(var(--btn-bg));
+    border: vars.$border-width solid hsl(var(--btn-bc));
+    border-radius: var(--btn-rds);
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        opacity 0.2s ease;
+
+    &:hover,
+    &.hovered {
+        --btn-bg: var(--btn-clr, #{vars.$theme-bg-400}) / 0.9;
+    }
+
+    &:active,
+    &.active {
+        --btn-bg: var(--btn-clr, #{vars.$theme-bg-400});
+    }
+
+    &:focus-visible,
+    &.focused,
+    .toggle &:focus-visible {
+        outline: vars.$outline;
+    }
+
+    // soft and ghost-soft
+    &.soft,
+    &.ghost-soft:hover,
+    &.ghost-soft.hovered,
+    .toggle input:checked ~ &.soft {
+        --btn-bg: var(--btn-clr, #{vars.$theme-fg}) / 0.1;
+        --btn-fg: var(--btn-clr, #{vars.$theme-fg});
+        --btn-bc: #{vars.$transparent};
+    }
+
+    &.soft:hover,
+    &.soft.hovered {
+        --btn-bg: var(--btn-clr, #{vars.$theme-fg}) / 0.25;
+    }
+
+    &.soft:active,
+    &.soft.active,
+    &.ghost-soft:active,
+    &.ghost-soft.active {
+        --btn-bg: var(--btn-clr, #{vars.$theme-fg}) / 0.2;
+    }
+
+    // outline and ghost-outline
+    &.outline,
+    &.ghost-outline:hover,
+    &.ghost-outline.hovered,
+    .toggle input:checked ~ &.outline {
+        --btn-bg: #{vars.$transparent};
+        --btn-fg: var(--btn-clr, #{vars.$theme-fg});
+        --btn-bc: var(--btn-clr, #{vars.$theme-fg}) / 0.8;
+    }
+
+    &.outline:hover,
+    &.outline.hovered {
+        --btn-bg: var(--btn-clr, #{vars.$theme-fg});
+        --btn-fg: var(--btn-clr-fg, #{vars.$theme-bg-100});
+    }
+
+    &.outline:active,
+    &.outline.active,
+    &.ghost-outline:active,
+    &.ghost-outline.active {
+        --btn-fg: var(--btn-clr-fg, #{vars.$theme-bg-100});
+        --btn-bg: var(--btn-clr, #{vars.$theme-fg}) / 0.85;
+    }
+
+    // faded and ghost-faded
+    &.faded,
+    &.ghost-faded:hover,
+    &.ghost-faded.hovered,
+    .toggle input:checked ~ &.faded {
+        --btn-bg: var(--btn-clr, #{vars.$theme-fg}) / 0.1;
+        --btn-fg: var(--btn-clr, #{vars.$theme-fg});
+        --btn-bc: var(--btn-clr, #{vars.$theme-fg}) / 0.3;
+    }
+
+    &.faded:hover,
+    &.faded.hovered {
+        --btn-bg: var(--btn-clr, #{vars.$theme-fg}) / 0.25;
+    }
+
+    &.faded:active,
+    &.faded.active,
+    &.ghost-faded:active,
+    &.ghost-faded.active {
+        --btn-bg: var(--btn-clr, #{vars.$theme-fg}) / 0.2;
+    }
+
+    // ghost
+    &.ghost,
+    &.ghost-soft,
+    &.ghost-outline,
+    &.ghost-faded {
+        --btn-bg: #{vars.$transparent};
+        --btn-fg: var(--btn-clr, #{vars.$theme-fg});
+        --btn-bc: #{vars.$transparent};
+    }
+
+    &.ghost:hover,
+    &.ghost.hovered {
+        --btn-bg: var(--btn-clr, #{vars.$theme-fg});
+        --btn-fg: var(--btn-clr-fg, #{vars.$theme-bg-100});
+    }
+
+    &.ghost:active,
+    &.ghost.active {
+        --btn-bg: var(--btn-clr, #{vars.$theme-fg}) / 0.85;
+    }
+
+    // link
+    &.link {
+        --btn-bg: #{vars.$transparent};
+        --btn-fg: var(--btn-clr, #{vars.$theme-fg});
+        --btn-bc: #{vars.$transparent};
+
+        text-underline-offset: 4px;
+    }
+
+    &.link:hover,
+    &.link.hovered {
+        text-decoration: underline;
+        --btn-bg: #{vars.$transparent};
+    }
+
+    &.link:active,
+    &.link.active {
+        opacity: 0.7;
+    }
+
+    // loading
+    &.loading {
+        pointer-events: none;
+        position: relative;
+        color: transparent;
+        opacity: 0.9;
+    }
+
+    &.loading::after {
+        content: "";
+        position: absolute;
+        width: 1em;
+        height: 1em;
+
+        border: 2px solid hsl(var(--btn-fg));
+        border-top-color: transparent;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: btn-loading 0.75s linear infinite;
+    }
+
+    // icon
+    .icon:only-child {
+        height: 1em;
+        width: 1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        margin-inline: calc(var(--btn-py) - var(--btn-px));
+    }
+
+    .icon svg {
+        width: var(--btn-fs);
+        height: var(--btn-fs);
+
+        &:not([fill="none"]) {
+            fill: currentColor;
+        }
+    }
+
+    // sizes
+    @include mixins.each-size($btn-sizes) using ($name, $value) {
+        @include btn-size($name);
+    }
+
+    // responsive (base values match .xl)
+    &.responsive {
+        @include btn-size("xl");
+    }
+
+    // breakpoint-scoped size + responsive overrides (e.g. .sm:md)
+    @each $bp-name in map.keys(vars.$breakpoints) {
+        @include mixins.breakpoint-down($bp-name) {
+            @each $name in map.keys($btn-sizes) {
+                &.#{$bp-name}\:#{$name} {
+                    @include btn-size($name);
+                }
+            }
+
+            @if list.index($btn-responsive-steps, $bp-name) {
+                &.responsive {
+                    @include btn-size($bp-name);
+                }
+            }
+        }
+    }
+
+    // colors
+    @include mixins.each-color("btn");
+
+    @include mixins.reduced-motion {
+        transition: none;
+
+        &.loading::after {
+            animation-duration: 1.5s;
+        }
+    }
+}

@@ -1,0 +1,89 @@
+@use "sass:map";
+
+@use "../abstracts/functions" as fn;
+
+// private (leading "-") so @forward doesn't leak or clash with layout.scss
+// scale: 0, px, then steps of the spacing token
+$-space-steps: (1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32);
+$-spaces: (
+    "0": 0,
+    "px": 1px,
+);
+
+@each $n in $-space-steps {
+    $-spaces: map.merge(
+        $-spaces,
+        (
+            "#{$n}": fn.space($n),
+        )
+    );
+}
+
+// negative scale (no 0 or px)
+$-negative-steps: (1, 2, 3, 4, 6, 8, 12, 16);
+$-negative-spaces: ();
+
+@each $n in $-negative-steps {
+    $-negative-spaces: map.merge(
+        $-negative-spaces,
+        (
+            "#{$n}": fn.space($n * -1),
+        )
+    );
+}
+
+// side suffix -> CSS property suffixes
+// x/y are physical, s/e are logical (RTL-safe)
+$-sides: (
+    "": (""),
+    "x": (
+        "-left",
+        "-right",
+    ),
+    "y": (
+        "-top",
+        "-bottom",
+    ),
+    "t": ("-top"),
+    "r": ("-right"),
+    "b": ("-bottom"),
+    "l": ("-left"),
+    "s": ("-inline-start"),
+    "e": ("-inline-end"),
+);
+
+@mixin -spacing($prefix, $property, $values, $negative: false) {
+    $dash: "";
+
+    @if $negative {
+        $dash: "-";
+    }
+
+    @each $side, $suffixes in $-sides {
+        @each $name, $value in $values {
+            .#{$dash}#{$prefix}#{$side}-#{$name} {
+                @each $suffix in $suffixes {
+                    #{$property}#{$suffix}: $value;
+                }
+            }
+        }
+    }
+}
+
+// padding
+@include -spacing("p", "padding", $-spaces);
+
+// margin
+@include -spacing(
+    "m",
+    "margin",
+    map.merge(
+        $-spaces,
+        (
+            "auto": auto,
+        )
+    )
+);
+
+// negative margin
+@include -spacing("m", "margin", $-negative-spaces, $negative: true);

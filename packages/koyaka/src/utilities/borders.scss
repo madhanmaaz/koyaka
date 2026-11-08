@@ -1,0 +1,63 @@
+@use "../abstracts/variables" as vars;
+
+// border radius
+$radii: (
+    "none": 0,
+    "xs": 0.125rem,
+    "sm": 0.25rem,
+    "md": 0.375rem,
+    "lg": 0.5rem,
+    "xl": 0.75rem,
+    "2xl": 1rem,
+    "3xl": 1.5rem,
+    "4xl": 2rem,
+    "full": 9999px,
+);
+
+@each $name, $value in $radii {
+    .rounded-#{$name} {
+        border-radius: $value;
+    }
+}
+
+// borders
+.border {
+    border: vars.$border;
+}
+
+.border-t {
+    border-top: vars.$border;
+}
+
+.border-b {
+    border-bottom: vars.$border;
+}
+
+.border-l {
+    border-left: vars.$border;
+}
+
+.border-r {
+    border-right: vars.$border;
+}
+
+// logical (RTL-safe)
+.border-s {
+    border-inline-start: vars.$border;
+}
+
+.border-e {
+    border-inline-end: vars.$border;
+}
+
+.border-x {
+    border-inline: vars.$border;
+}
+
+.border-y {
+    border-block: vars.$border;
+}
+
+.border-none {
+    border: none;
+}

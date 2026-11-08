@@ -1,0 +1,121 @@
+@use "sass:map";
+
+$tokens: (
+    // spacing
+    "sp": 0.25rem,
+
+    // sizes
+    "box-sz": 0.5rem,
+    "field-sz": 0.25rem,
+    "ctrl-sz": 0.25rem,
+
+    // radius
+    "box-rds": 0.5rem,
+    "field-rds": 0.25rem,
+    "ctrl-rds": 0.125rem,
+
+    // borders
+    "bw": 1px,
+    "ow": 2px,
+    "bc": "var(--fg) / 0.11",
+    "border": "var(--bw) solid hsl(var(--bc))",
+    "outline": "var(--ow) solid hsl(var(--fg-alt))",
+    "transparent": "0 0% 0% / 0",
+
+    // fonts
+    "ff":
+        'var(--app-ff, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+    "ff-mono":
+        'var(--app-ff-mono, ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace)'
+);
+
+@function -ref($name) {
+    @if not map.has-key($tokens, $name) {
+        @error "No token `#{$name}` in $tokens. Available: #{map.keys($tokens)}.";
+    }
+
+    @return var(--#{$name});
+}
+
+$spacing: -ref("sp");
+
+$box-size: -ref("box-sz");
+$field-size: -ref("field-sz");
+$ctrl-size: -ref("ctrl-sz");
+
+$box-radius: -ref("box-rds");
+$field-radius: -ref("field-rds");
+$ctrl-radius: -ref("ctrl-rds");
+
+$border-width: -ref("bw");
+$outline-width: -ref("ow");
+$border-color: -ref("bc");
+$border: -ref("border");
+$outline: -ref("outline");
+$transparent: -ref("transparent");
+
+$font-family: -ref("ff");
+$font-family-mono: -ref("ff-mono");
+
+// z-index
+$z-index: (
+    "menu-popover": 1000,
+    "context-menu": 1010,
+    "popover": 1020,
+    "tooltip": 1030,
+    "app-shell-header": 1031,
+    "modal": 1040,
+);
+
+// breakpoints
+$breakpoints: (
+    "xs": 30rem,
+    "sm": 40rem,
+    "md": 48rem,
+    "lg": 64rem,
+    "xl": 80rem,
+    "xxl": 96rem,
+);
+
+// colors
+$colors: (
+    "primary",
+    "secondary",
+    "accent",
+    "neutral",
+    "info",
+    "success",
+    "warning",
+    "error"
+);
+
+$theme-bg-100: var(--bg-100);
+$theme-bg-200: var(--bg-200);
+$theme-bg-300: var(--bg-300);
+$theme-bg-400: var(--bg-400);
+$theme-fg: var(--fg);
+$theme-fg-alt: var(--fg-alt);
+
+$theme-primary: var(--primary);
+$theme-primary-fg: var(--primary-fg);
+
+$theme-secondary: var(--secondary);
+$theme-secondary-fg: var(--secondary-fg);
+
+$theme-accent: var(--accent);
+$theme-accent-fg: var(--accent-fg);
+
+$theme-neutral: var(--neutral);
+$theme-neutral-fg: var(--neutral-fg);
+
+$theme-info: var(--info);
+$theme-info-fg: var(--info-fg);
+
+$theme-success: var(--success);
+$theme-success-fg: var(--success-fg);
+
+$theme-warning: var(--warning);
+$theme-warning-fg: var(--warning-fg);
+
+$theme-error: var(--error);
+$theme-error-fg: var(--error-fg);

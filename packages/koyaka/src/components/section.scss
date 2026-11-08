@@ -1,0 +1,60 @@
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+// vertical padding per breakpoint: base, then sm / md / lg and up
+$section-sizes: (
+    "xs": (
+        base: 0.5rem,
+        sm: 1rem,
+        md: 1.5rem,
+        lg: 3rem,
+    ),
+    "sm": (
+        base: 0.75rem,
+        sm: 1.5rem,
+        md: 2rem,
+        lg: 5rem,
+    ),
+    "md": (
+        base: 1rem,
+        sm: 2rem,
+        md: 3rem,
+        lg: 8rem,
+    ),
+    "lg": (
+        base: 1.5rem,
+        sm: 3rem,
+        md: 5rem,
+        lg: 10rem,
+    ),
+    "xl": (
+        base: 2rem,
+        sm: 4rem,
+        md: 7rem,
+        lg: 14rem,
+    ),
+);
+
+@mixin section-size($size) {
+    $steps: fn.require($section-sizes, $size);
+
+    --section-py: #{fn.require($steps, "base")};
+
+    @each $bp in ("sm", "md", "lg") {
+        @include mixins.breakpoint-up($bp) {
+            --section-py: #{fn.require($steps, $bp)};
+        }
+    }
+}
+
+.section {
+    @include section-size("md");
+
+    width: 100%;
+    padding-block: var(--section-py);
+
+    // sizes
+    @include mixins.each-size($section-sizes) using ($name, $value) {
+        @include section-size($name);
+    }
+}

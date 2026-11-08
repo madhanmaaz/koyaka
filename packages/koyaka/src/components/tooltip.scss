@@ -1,0 +1,27 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+.tooltip {
+    display: inline-block;
+
+    &-content {
+        min-width: max-content;
+
+        border: vars.$border;
+        border-radius: calc(#{vars.$ctrl-radius} * 3);
+        font-size: fn.to-rem(12);
+        color: hsl(vars.$theme-fg-alt);
+        background-color: hsl(vars.$theme-bg-400);
+        padding: calc(#{vars.$ctrl-size} * 0.5) calc(#{vars.$ctrl-size} * 1.5);
+
+        position: fixed;
+        z-index: fn.zindex("tooltip");
+
+        display: flex;
+    }
+
+    &:not(.active) &-content {
+        display: none;
+    }
+}

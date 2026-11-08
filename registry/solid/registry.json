@@ -1,0 +1,338 @@
+{
+    "framework": "solid",
+    "version": "0.0.1",
+    "dependencies": [
+        "solid-js"
+    ],
+    "components": {
+        "accordion": {
+            "files": [
+                "components/accordion/accordion.tsx",
+                "components/accordion/index.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "alert": {
+            "files": [
+                "components/alert/alert.tsx",
+                "components/alert/index.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "avatar": {
+            "files": [
+                "components/avatar/avatar.tsx",
+                "components/avatar/index.ts",
+                "components/avatar/useAvatarImage.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "badge": {
+            "files": [
+                "components/badge/badge.tsx",
+                "components/badge/index.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "breadcrumbs": {
+            "files": [
+                "components/breadcrumbs/breadcrumbs.tsx",
+                "components/breadcrumbs/index.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "button": {
+            "files": [
+                "components/button/button.tsx",
+                "components/button/index.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "card": {
+            "files": [
+                "components/card/card.tsx",
+                "components/card/index.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "checkbox": {
+            "files": [
+                "components/checkbox/checkbox.tsx",
+                "components/checkbox/index.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "container": {
+            "files": [
+                "components/container/container.tsx",
+                "components/container/index.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "context-menu": {
+            "files": [
+                "components/context-menu/context-menu.tsx",
+                "components/context-menu/index.tsx",
+                "components/menu/index.ts",
+                "components/menu/menu-popover.tsx",
+                "components/menu/menu.tsx",
+                "helpers/escapeStack.ts",
+                "helpers/events.ts",
+                "helpers/positioner.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts",
+                "shared/floatingEngine.tsx"
+            ],
+            "dependencies": []
+        },
+        "field": {
+            "files": [
+                "components/field/field.tsx",
+                "components/field/index.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "group": {
+            "files": [
+                "components/group/group.tsx",
+                "components/group/index.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "indicator": {
+            "files": [
+                "components/indicator/index.ts",
+                "components/indicator/indicator.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "input": {
+            "files": [
+                "components/input/index.ts",
+                "components/input/input.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "label": {
+            "files": [
+                "components/label/index.ts",
+                "components/label/label.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "list": {
+            "files": [
+                "components/list/index.ts",
+                "components/list/list.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "loader": {
+            "files": [
+                "components/loader/index.ts",
+                "components/loader/loader.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "menu": {
+            "files": [
+                "components/menu/index.ts",
+                "components/menu/menu-popover.tsx",
+                "components/menu/menu.tsx",
+                "helpers/escapeStack.ts",
+                "helpers/events.ts",
+                "helpers/positioner.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts",
+                "shared/floatingEngine.tsx"
+            ],
+            "dependencies": []
+        },
+        "modal": {
+            "files": [
+                "components/modal/index.ts",
+                "components/modal/modal.tsx",
+                "helpers/escapeStack.ts",
+                "helpers/events.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts",
+                "shared/overlayEngine.tsx"
+            ],
+            "dependencies": []
+        },
+        "pagination": {
+            "files": [
+                "components/pagination/index.ts",
+                "components/pagination/pagination.tsx",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "popover": {
+            "files": [
+                "components/popover/index.ts",
+                "components/popover/popover.tsx",
+                "helpers/escapeStack.ts",
+                "helpers/events.ts",
+                "helpers/positioner.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts",
+                "shared/floatingEngine.tsx"
+            ],
+            "dependencies": []
+        },
+        "progress": {
+            "files": [
+                "components/progress/index.ts",
+                "components/progress/progress.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "prose": {
+            "files": [
+                "components/prose/index.ts",
+                "components/prose/prose.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "radial-progress": {
+            "files": [
+                "components/radial-progress/index.ts",
+                "components/radial-progress/radial-progress.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "radio": {
+            "files": [
+                "components/radio/index.ts",
+                "components/radio/radio.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "section": {
+            "files": [
+                "components/section/index.ts",
+                "components/section/section.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "select": {
+            "files": [
+                "components/select/index.ts",
+                "components/select/select.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "slider": {
+            "files": [
+                "components/slider/index.ts",
+                "components/slider/slider.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "status": {
+            "files": [
+                "components/status/index.ts",
+                "components/status/status.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "switch": {
+            "files": [
+                "components/switch/index.ts",
+                "components/switch/switch.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "table": {
+            "files": [
+                "components/table/index.ts",
+                "components/table/table.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "tabs": {
+            "files": [
+                "components/tabs/index.ts",
+                "components/tabs/tabs.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "textarea": {
+            "files": [
+                "components/textarea/index.ts",
+                "components/textarea/textarea.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "tooltip": {
+            "files": [
+                "components/tooltip/index.ts",
+                "components/tooltip/tooltip.tsx",
+                "helpers/escapeStack.ts",
+                "helpers/events.ts",
+                "helpers/positioner.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts",
+                "shared/floatingEngine.tsx"
+            ],
+            "dependencies": []
+        }
+    },
+    "blocks": {}
+}

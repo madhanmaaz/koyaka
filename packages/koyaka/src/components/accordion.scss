@@ -1,0 +1,231 @@
+@use "sass:map";
+
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$accordion-sizes: (
+    "xs": (
+        p: 1,
+        fs: 0.75,
+    ),
+    "sm": (
+        p: 1.5,
+        fs: 0.8125,
+    ),
+    "md": (
+        p: 2,
+        fs: 0.875,
+    ),
+    "lg": (
+        p: 2.5,
+        fs: 1,
+    ),
+    "xl": (
+        p: 3,
+        fs: 1.125,
+    ),
+);
+
+@mixin accordion-size($size) {
+    $props: fn.require($accordion-sizes, $size);
+
+    --accordion_p: #{fn.require($props, p)};
+    --accordion_fs: #{fn.require($props, fs)};
+}
+
+.accordion {
+    @include accordion-size("md");
+
+    --accordion-p: calc(#{vars.$box-size} * var(--accordion_p));
+    --accordion-fs: calc(1rem * var(--accordion_fs));
+    --accordion-icon-offset: 0.8rem;
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    // accordion-item
+    &-item {
+        display: grid;
+        grid-template-rows: max-content 0fr;
+        border-bottom: vars.$border;
+        transition: grid-template-rows 0.2s ease;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &.active {
+            grid-template-rows: max-content 1fr;
+        }
+    }
+
+    // accordion-trigger
+    &-trigger {
+        display: flex;
+        align-items: center;
+        gap: fn.space(2);
+
+        position: relative;
+        width: 100%;
+        padding-block: var(--accordion-p);
+        padding-inline-end: 1.5rem;
+
+        color: hsl(vars.$theme-fg);
+        text-align: start;
+        font-size: var(--accordion-fs);
+        font-weight: 500;
+        font-family: inherit;
+
+        cursor: pointer;
+        touch-action: manipulation;
+        user-select: none;
+
+        &:focus-visible {
+            outline: vars.$outline;
+            border-radius: calc(vars.$box-radius * 1.5);
+        }
+    }
+
+    // accordion-content
+    &-content {
+        min-height: 0;
+        overflow: hidden;
+        visibility: hidden;
+        transition: visibility 0.2s ease;
+    }
+
+    &-item.active > &-content {
+        visibility: visible;
+    }
+
+    .accordion-body {
+        color: hsl(var(--base-fg-alt));
+        padding-bottom: var(--accordion-p);
+        font-size: var(--accordion-fs);
+    }
+
+    // surface & split
+    &.surface,
+    &.split > .accordion-item {
+        @include mixins.surface;
+    }
+
+    &:where(.surface, .split) {
+        --accordion-icon-offset: 0;
+    }
+
+    &:where(.surface, .split) > .accordion-item {
+        padding-inline: var(--accordion-p);
+    }
+
+    &.split {
+        gap: fn.space(2);
+    }
+
+    // icon rotation state (shared by chevron & disclosure)
+    &.icon-chevron {
+        --accordion-icon-rotate: 45deg;
+        --accordion-icon-rotate-active: 225deg;
+    }
+
+    &.icon-disclosure {
+        --accordion-icon-rotate: -45deg;
+        --accordion-icon-rotate-active: 45deg;
+
+        @include mixins.rtl {
+            --accordion-icon-rotate: 135deg;
+        }
+    }
+
+    &:where(.icon-chevron, .icon-disclosure) > .accordion-item.active {
+        --accordion-icon-rotate: var(--accordion-icon-rotate-active);
+    }
+
+    // icon-chevron & icon-disclosure
+    &:where(.icon-chevron, .icon-disclosure)
+        > .accordion-item
+        > .accordion-trigger::before {
+        content: "";
+
+        position: absolute;
+        top: 50%;
+        inset-inline-end: var(--accordion-icon-offset);
+
+        width: 0.45rem;
+        height: 0.45rem;
+
+        border-right: vars.$border-width solid hsl(vars.$theme-fg-alt);
+        border-bottom: vars.$border-width solid hsl(vars.$theme-fg-alt);
+
+        transform: translateY(-50%) rotate(var(--accordion-icon-rotate));
+        transition: transform 0.2s ease;
+    }
+
+    // icon-plus
+    &.icon-plus > .accordion-item > .accordion-trigger::before,
+    &.icon-plus > .accordion-item > .accordion-trigger::after {
+        content: "";
+
+        position: absolute;
+        top: 50%;
+        inset-inline-end: var(--accordion-icon-offset);
+
+        width: 0.625rem;
+        height: 0.125rem;
+
+        background-color: hsl(vars.$theme-fg-alt);
+        transform: translateY(-50%);
+
+        transition:
+            transform 0.2s ease,
+            opacity 0.2s ease;
+    }
+
+    &.icon-plus > .accordion-item > .accordion-trigger::after {
+        transform: translateY(-50%) rotate(90deg);
+    }
+
+    &.icon-plus > .accordion-item.active > .accordion-trigger::after {
+        opacity: 0;
+    }
+
+    // icon-start
+    &.icon-start > .accordion-item > .accordion-trigger {
+        padding-inline-start: 2.3rem;
+        padding-inline-end: 0;
+    }
+
+    &.icon-start:where(.surface, .split)
+        > .accordion-item
+        > .accordion-trigger {
+        padding-inline-start: 1.3rem;
+    }
+
+    &.icon-start > .accordion-item > .accordion-trigger::before,
+    &.icon-start > .accordion-item > .accordion-trigger::after {
+        inset-inline-end: auto;
+        inset-inline-start: var(--accordion-icon-offset);
+    }
+
+    // sizes
+    @include mixins.each-size($accordion-sizes) using ($name, $value) {
+        @include accordion-size($name);
+    }
+
+    // reduced motion
+    @include mixins.reduced-motion {
+        &-content,
+        &-item:not(.active) > &-content {
+            transition: none;
+        }
+
+        & > .accordion-item > .accordion-trigger {
+            &::before,
+            &::after {
+                transition: none !important;
+            }
+        }
+    }
+}

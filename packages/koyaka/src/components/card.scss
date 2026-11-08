@@ -1,0 +1,205 @@
+@use "sass:list";
+@use "sass:map";
+
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+// horizontal cards stack at this breakpoint unless a `{bp}:vertical` class picks another
+$card-default-stack: "md";
+
+// every `{bp}:vertical` class except the default breakpoint's
+$card-stack-exclude: ();
+@each $name in map.keys(vars.$breakpoints) {
+    @if $name != $card-default-stack {
+        $card-stack-exclude: list.append(
+            $card-stack-exclude,
+            ".#{$name}\\:vertical",
+            comma
+        );
+    }
+}
+
+@mixin card-stacked {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas: var(
+        --card-layout-vertical,
+        "media" "header" "content" "footer"
+    );
+
+    .card-media {
+        height: auto;
+    }
+}
+
+.card {
+    --card_p: 2;
+    --card_rds: 1.5;
+
+    --card-bg: var(--card-clr, #{vars.$theme-bg-200});
+    --card-fg: var(--card-clr-fg, #{vars.$theme-fg});
+
+    /* on a solid color card, border and dividers use --card-clr-fg */
+    --card-bc: var(--card-clr-fg, #{vars.$border-color});
+
+    --card-p: calc(#{vars.$box-size} * var(--card_p));
+    --card-rds: calc(#{vars.$box-radius} * var(--card_rds));
+
+    color: hsl(var(--card-fg));
+    background-color: hsl(var(--card-bg));
+    border-radius: var(--card-rds);
+    border: vars.$border-width solid hsl(var(--card-bc));
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+
+    &:focus-visible,
+    &.focused {
+        outline: vars.$outline;
+    }
+
+    &-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: fn.space(2);
+
+        padding: var(--card-p);
+        border-bottom: vars.$border-width solid hsl(var(--card-bc));
+    }
+
+    &-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: fn.space(2);
+
+        padding: var(--card-p);
+    }
+
+    &-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: fn.space(2);
+
+        padding: var(--card-p);
+        border-top: vars.$border-width solid hsl(var(--card-bc));
+        background-color: hsl(var(--card-fg) / 0.04);
+    }
+
+    &-media {
+        overflow: hidden;
+        flex-shrink: 0;
+        line-height: 0;
+        aspect-ratio: 16 / 9;
+
+        img,
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    // variants
+    &.soft {
+        --card-bg: var(--card-clr, #{vars.$theme-fg}) / 0.1;
+        --card-bc: var(--card-clr, #{vars.$theme-fg}) / 0.3;
+        --card-fg: var(--card-clr, #{vars.$theme-fg});
+
+        border-color: transparent;
+    }
+
+    &.outline {
+        --card-bg: #{vars.$transparent};
+        --card-bc: var(--card-clr, #{vars.$theme-fg}) / 0.8;
+        --card-fg: var(--card-clr, #{vars.$theme-fg});
+    }
+
+    &.faded {
+        --card-bg: var(--card-clr, #{vars.$theme-fg}) / 0.1;
+        --card-bc: var(--card-clr, #{vars.$theme-fg}) / 0.3;
+        --card-fg: var(--card-clr, #{vars.$theme-fg});
+    }
+
+    // hoverable (feedback per variant, since each variant owns --card-bg)
+    &.hoverable {
+        cursor: pointer;
+    }
+
+    &.hoverable:hover,
+    &.hoverable.hovered {
+        --card-bg: var(--card-clr, #{vars.$theme-bg-300}) / 0.9;
+    }
+
+    &.hoverable.soft:hover,
+    &.hoverable.soft.hovered,
+    &.hoverable.faded:hover,
+    &.hoverable.faded.hovered {
+        --card-bg: var(--card-clr, #{vars.$theme-fg}) / 0.2;
+    }
+
+    &.hoverable.outline:hover,
+    &.hoverable.outline.hovered {
+        --card-bg: var(--card-clr, #{vars.$theme-fg}) / 0.05;
+    }
+
+    // horizontal
+    &.horizontal {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas: var(
+            --card-layout,
+            "media header" "media content" "media footer"
+        );
+
+        .card-header {
+            grid-area: header;
+        }
+
+        .card-media {
+            grid-area: media;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-content {
+            grid-area: content;
+        }
+
+        .card-footer {
+            grid-area: footer;
+        }
+    }
+
+    // stacking: horizontal cards go vertical at the default breakpoint,
+    // or at the one named by a `{bp}:vertical` class
+    @each $bp-name in map.keys(vars.$breakpoints) {
+        @include mixins.breakpoint-down($bp-name) {
+            @if $bp-name == $card-default-stack {
+                &.horizontal:not(#{$card-stack-exclude}) {
+                    @include card-stacked;
+                }
+            } @else {
+                &.horizontal.#{$bp-name}\:vertical {
+                    @include card-stacked;
+                }
+            }
+        }
+    }
+
+    // colors
+    @include mixins.each-color("card");
+
+    @include mixins.reduced-motion {
+        transition: none;
+    }
+}

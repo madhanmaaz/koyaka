@@ -1,0 +1,13 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+
+.popover {
+    &-content {
+        position: absolute;
+        z-index: fn.zindex("popover");
+    }
+
+    &:not(.active) &-content {
+        display: none;
+    }
+}

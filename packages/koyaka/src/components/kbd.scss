@@ -1,0 +1,77 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$kbd-sizes: (
+    "xs": (
+        size: 3.5,
+        fs: 0.625,
+    ),
+    "sm": (
+        size: 4.25,
+        fs: 0.6875,
+    ),
+    "md": (
+        size: 5,
+        fs: 0.75,
+    ),
+    "lg": (
+        size: 6,
+        fs: 0.875,
+    ),
+    "xl": (
+        size: 7,
+        fs: 1,
+    ),
+);
+
+@mixin kbd-size($size) {
+    $props: fn.require($kbd-sizes, $size);
+
+    --kbd_size: #{fn.require($props, size)};
+    --kbd_fs: #{fn.require($props, fs)};
+}
+
+// kbd
+.content kbd,
+.kbd {
+    @include kbd-size("md");
+
+    --kbd-size: calc(#{vars.$ctrl-size} * var(--kbd_size));
+    --kbd-fs: calc(1rem * var(--kbd_fs));
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: fn.space(1);
+
+    min-width: var(--kbd-size);
+    height: var(--kbd-size);
+    padding: vars.$ctrl-size;
+    font-size: var(--kbd-fs);
+    font-weight: 500;
+    line-height: 1;
+
+    color: hsl(vars.$theme-fg-alt);
+    background: linear-gradient(
+        to bottom,
+        hsl(vars.$theme-bg-200),
+        hsl(vars.$theme-bg-300)
+    );
+
+    border-radius: calc(#{vars.$ctrl-radius} * 2);
+    border: vars.$border;
+    border-bottom-width: 2px;
+
+    box-shadow:
+        inset 0 1px 0 hsl(#{vars.$theme-bg-100} / 0.6),
+        0 1px 0 hsl(#{vars.$theme-bg-400} / 0.6);
+
+    user-select: none;
+    white-space: nowrap;
+
+    // sizes
+    @include mixins.each-size($kbd-sizes) using ($name, $value) {
+        @include kbd-size($name);
+    }
+}

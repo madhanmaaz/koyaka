@@ -1,0 +1,35 @@
+@use "sass:map";
+@use "sass:math";
+
+@use "variables" as vars;
+
+@function require($map, $key) {
+    @if not map.has-key($map, $key) {
+        @error "Unknown key `#{$key}`. Available: #{map.keys($map)}.";
+    }
+
+    @return map.get($map, $key);
+}
+
+@function breakpoint($name) {
+    @return require(vars.$breakpoints, $name);
+}
+
+@function zindex($layer) {
+    @return require(vars.$z-index, $layer);
+}
+
+@function to-rem($px, $base: 16) {
+    @if not math.is-unitless($px) {
+        @if math.unit($px) != "px" {
+            @error "to-rem() expects px or a unitless number, got `#{$px}`.";
+        }
+        $px: math.div($px, 1px);
+    }
+
+    @return math.div($px, $base) * 1rem;
+}
+
+@function space($n) {
+    @return calc(vars.$spacing * #{$n});
+}

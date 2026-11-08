@@ -1,0 +1,56 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/mixins";
+
+@mixin skeleton-shimmer {
+    background-color: hsl(var(--skeleton-base));
+    background-image: linear-gradient(
+        100deg,
+        hsl(var(--skeleton-base)) 40%,
+        hsl(var(--skeleton-shine) / 0.12) 50%,
+        hsl(var(--skeleton-base)) 60%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 2s ease-in-out infinite;
+
+    // a static gray placeholder still reads as loading
+    @include mixins.reduced-motion {
+        background-image: none;
+        animation: none;
+    }
+}
+
+.skeleton,
+.skeleton-block {
+    --skeleton-base: #{vars.$theme-bg-300};
+    --skeleton-shine: #{vars.$theme-fg};
+
+    border-radius: calc(#{vars.$box-radius} * 1.5);
+
+    @include skeleton-shimmer;
+}
+
+// standalone placeholder (text line, avatar, card)
+.skeleton {
+    min-height: 1em;
+}
+
+// wraps real content so the layout is identical once it loads
+.skeleton-block {
+    color: transparent !important; // beats component text colors regardless of order
+    border-color: transparent; // keeps the box size, unlike border: none
+    pointer-events: none;
+    user-select: none;
+
+    * {
+        opacity: 0;
+    }
+}
+
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}

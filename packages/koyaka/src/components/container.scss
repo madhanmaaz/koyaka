@@ -1,0 +1,25 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/mixins";
+
+.container {
+    --container_p: 3.5;
+    --container-p: calc(#{vars.$spacing} * var(--container_p));
+
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: var(--container-p);
+
+    // responsive container (smallest first, so the largest matching breakpoint wins)
+    @each $name, $bp in vars.$breakpoints {
+        @include mixins.breakpoint-up($name) {
+            max-width: $bp;
+        }
+    }
+
+    // sizes — fixed widths, override the responsive steps by specificity
+    @each $name, $bp in vars.$breakpoints {
+        &.#{$name} {
+            max-width: $bp;
+        }
+    }
+}

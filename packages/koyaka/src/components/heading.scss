@@ -1,0 +1,132 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+// per tag: title (fs, lh, ls) and subtitle (fs, lh)
+$heading-levels: (
+    "h1": (
+        fs: clamp(1.75rem, 1.25rem + 2vw, 2.25rem),
+        lh: 1.15,
+        ls: -0.02em,
+        sub-fs: 1.25rem,
+        sub-lh: 1.4,
+    ),
+    "h2": (
+        fs: clamp(1.5rem, 1.2rem + 1.2vw, 1.75rem),
+        lh: 1.2,
+        ls: -0.015em,
+        sub-fs: 1.125rem,
+        sub-lh: 1.45,
+    ),
+    "h3": (
+        fs: 1.375rem,
+        lh: 1.25,
+        ls: -0.01em,
+        sub-fs: 1rem,
+        sub-lh: 1.5,
+    ),
+    "h4": (
+        fs: 1.125rem,
+        lh: 1.3,
+        ls: 0,
+        sub-fs: 0.9375rem,
+        sub-lh: 1.5,
+    ),
+    "h5": (
+        fs: 0.9375rem,
+        lh: 1.4,
+        ls: 0,
+        sub-fs: 0.875rem,
+        sub-lh: 1.5,
+    ),
+    "h6": (
+        fs: 0.8125rem,
+        lh: 1.4,
+        ls: 0.01em,
+        sub-fs: 0.8125rem,
+        sub-lh: 1.5,
+    ),
+);
+
+$description-sizes: (
+    "xs": (
+        fs: 0.75rem,
+    ),
+    "sm": (
+        fs: 0.8125rem,
+    ),
+    "md": (
+        fs: 0.875rem,
+    ),
+    "lg": (
+        fs: 1rem,
+    ),
+    "xl": (
+        fs: 1.125rem,
+    ),
+);
+
+@mixin description-size($size) {
+    $props: fn.require($description-sizes, $size);
+
+    --description-fs: #{fn.require($props, fs)};
+}
+
+// title (zero specificity base, easy to override)
+:where(h1, h2, h3, h4, h5, h6).title {
+    --title-fg: #{vars.$theme-fg};
+
+    color: hsl(var(--title-fg));
+    font-size: var(--title-fs);
+    font-weight: 600;
+    line-height: var(--title-lh);
+    letter-spacing: var(--title-ls, 0);
+    text-wrap: balance;
+}
+
+// subtitle
+:where(h1, h2, h3, h4, h5, h6).subtitle {
+    --subtitle-fg: #{vars.$theme-fg-alt};
+
+    color: hsl(var(--subtitle-fg));
+    font-size: var(--subtitle-fs);
+    font-weight: 500;
+    line-height: var(--subtitle-lh);
+    text-wrap: pretty;
+}
+
+// per-tag scale
+@each $level, $props in $heading-levels {
+    #{$level}.title {
+        --title-fs: #{fn.require($props, fs)};
+        --title-lh: #{fn.require($props, lh)};
+        --title-ls: #{fn.require($props, ls)};
+    }
+
+    #{$level}.subtitle {
+        --subtitle-fs: #{fn.require($props, sub-fs)};
+        --subtitle-lh: #{fn.require($props, sub-lh)};
+    }
+}
+
+// description: muted helper text under a title (works on p, span, div)
+.description {
+    @include description-size("md");
+
+    --description-fg: #{vars.$theme-fg-alt};
+    --description-lh: 1.5;
+
+    color: hsl(var(--description-fg));
+    font-size: var(--description-fs);
+    line-height: var(--description-lh);
+    text-wrap: pretty;
+
+    @include mixins.each-size($description-sizes) using ($name, $value) {
+        @include description-size($name);
+    }
+}
+
+// spacing: text directly under a title sits closer to it
+:is(.title, .subtitle) + :is(.subtitle, .description) {
+    margin-top: fn.space(1);
+}

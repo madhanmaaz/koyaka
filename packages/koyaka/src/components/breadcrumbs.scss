@@ -1,0 +1,110 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$breadcrumbs-sizes: (
+    "xs": (
+        py: 1,
+        gap: 1,
+        fs: 0.6875,
+    ),
+    "sm": (
+        py: 1.5,
+        gap: 1.5,
+        fs: 0.75,
+    ),
+    "md": (
+        py: 2,
+        gap: 2,
+        fs: 0.875,
+    ),
+    "lg": (
+        py: 2.5,
+        gap: 2.5,
+        fs: 1,
+    ),
+    "xl": (
+        py: 3,
+        gap: 3,
+        fs: 1.125,
+    ),
+);
+
+@mixin breadcrumbs-size($size) {
+    $props: fn.require($breadcrumbs-sizes, $size);
+
+    --breadcrumbs_py: #{fn.require($props, py)};
+    --breadcrumbs_gap: #{fn.require($props, gap)};
+    --breadcrumbs_fs: #{fn.require($props, fs)};
+}
+
+.breadcrumbs {
+    @include breadcrumbs-size("md");
+
+    --breadcrumbs-py: calc(#{vars.$spacing} * var(--breadcrumbs_py));
+    --breadcrumbs-gap: calc(#{vars.$spacing} * var(--breadcrumbs_gap));
+    --breadcrumbs-fs: calc(1rem * var(--breadcrumbs_fs));
+
+    display: flex;
+    align-items: center;
+    gap: var(--breadcrumbs-gap);
+
+    max-width: 100%;
+    padding: var(--breadcrumbs-py) fn.space(1);
+
+    white-space: nowrap;
+    font-size: var(--breadcrumbs-fs);
+    overflow-x: auto;
+
+    &-item {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: var(--breadcrumbs-gap);
+        color: hsl(vars.$theme-fg-alt);
+    }
+
+    &-action {
+        color: hsl(vars.$theme-fg-alt);
+        font-family: inherit;
+        font-size: inherit;
+        text-underline-offset: 4px;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &:active {
+            opacity: 0.85;
+        }
+
+        &:focus-visible {
+            outline: vars.$outline;
+            border-radius: vars.$ctrl-radius;
+        }
+
+        &.active,
+        &[aria-current="page"] {
+            color: hsl(vars.$theme-fg);
+            cursor: default;
+            pointer-events: none;
+        }
+    }
+
+    &-separator {
+        color: hsl(vars.$theme-fg-alt);
+        opacity: 0.6;
+    }
+
+    // sizes
+    @include mixins.each-size($breadcrumbs-sizes) using ($name, $value) {
+        @include breadcrumbs-size($name);
+    }
+
+    @include mixins.rtl {
+        &-separator {
+            transform: scaleX(-1);
+        }
+    }
+}

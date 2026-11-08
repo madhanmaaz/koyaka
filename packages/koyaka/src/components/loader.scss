@@ -1,0 +1,166 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$loader-sizes: (
+    "xs": 2.5,
+    "sm": 4,
+    "md": 6,
+    "lg": 8,
+    "xl": 10,
+);
+
+.loader {
+    --loader_size: #{fn.require($loader-sizes, "md")};
+
+    --loader-size: calc(#{vars.$ctrl-size} * var(--loader_size));
+    --loader-thickness: max(2px, calc(var(--loader-size) / 8));
+    --loader-clr: currentColor;
+    --loader-speed: 0.8s;
+
+    display: inline-block;
+    flex-shrink: 0;
+
+    width: var(--loader-size);
+    height: var(--loader-size);
+
+    pointer-events: none;
+    color: inherit;
+
+    // a frozen loader looks broken, so slow it down instead of stopping it
+    @include mixins.reduced-motion {
+        --loader-speed: 2.4s;
+    }
+
+    // spinner
+    &.spinner {
+        border: var(--loader-thickness) solid hsl(#{vars.$theme-fg} / 0.15);
+        border-top-color: var(--loader-clr);
+        border-left-color: var(--loader-clr);
+        border-radius: 50%;
+        animation: loader-spin var(--loader-speed) linear infinite;
+    }
+
+    // arc
+    &.arc {
+        border: var(--loader-thickness) solid var(--loader-clr);
+        border-radius: 50%;
+        animation:
+            loader-arc-clip var(--loader-speed) infinite linear alternate,
+            loader-arc-rotate calc(var(--loader-speed) * 2) infinite linear;
+    }
+
+    // sizes
+    @include mixins.each-size($loader-sizes) using ($name, $size) {
+        --loader_size: #{$size};
+    }
+
+    // colors
+    @each $color in vars.$colors {
+        &.#{$color} {
+            --loader-clr: hsl(var(--#{$color}));
+        }
+    }
+}
+
+// animations
+@keyframes loader-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes loader-arc-clip {
+    0% {
+        clip-path: polygon(
+            50% 50%,
+            0 0,
+            50% 0%,
+            50% 0%,
+            50% 0%,
+            50% 0%,
+            50% 0%
+        );
+    }
+    12.5% {
+        clip-path: polygon(
+            50% 50%,
+            0 0,
+            50% 0%,
+            100% 0%,
+            100% 0%,
+            100% 0%,
+            100% 0%
+        );
+    }
+    25% {
+        clip-path: polygon(
+            50% 50%,
+            0 0,
+            50% 0%,
+            100% 0%,
+            100% 100%,
+            100% 100%,
+            100% 100%
+        );
+    }
+    50% {
+        clip-path: polygon(
+            50% 50%,
+            0 0,
+            50% 0%,
+            100% 0%,
+            100% 100%,
+            50% 100%,
+            0% 100%
+        );
+    }
+    62.5% {
+        clip-path: polygon(
+            50% 50%,
+            100% 0,
+            100% 0%,
+            100% 0%,
+            100% 100%,
+            50% 100%,
+            0% 100%
+        );
+    }
+    75% {
+        clip-path: polygon(
+            50% 50%,
+            100% 100%,
+            100% 100%,
+            100% 100%,
+            100% 100%,
+            50% 100%,
+            0% 100%
+        );
+    }
+    100% {
+        clip-path: polygon(
+            50% 50%,
+            50% 100%,
+            50% 100%,
+            50% 100%,
+            50% 100%,
+            50% 100%,
+            0% 100%
+        );
+    }
+}
+
+@keyframes loader-arc-rotate {
+    0% {
+        transform: scaleY(1) rotate(0deg);
+    }
+    49.99% {
+        transform: scaleY(1) rotate(135deg);
+    }
+    50% {
+        transform: scaleY(-1) rotate(0deg);
+    }
+    100% {
+        transform: scaleY(-1) rotate(-135deg);
+    }
+}

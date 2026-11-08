@@ -1,0 +1,96 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$radio-sizes: (
+    "xs": 3.5,
+    "sm": 4,
+    "md": 5,
+    "lg": 6,
+    "xl": 7,
+);
+
+.radio {
+    --radio_size: #{fn.require($radio-sizes, "md")};
+
+    --radio-size: calc(#{vars.$ctrl-size} * var(--radio_size));
+
+    display: inline-flex;
+    align-items: center;
+    gap: fn.space(2);
+
+    user-select: none;
+    position: relative;
+    width: fit-content;
+
+    input {
+        appearance: none;
+        width: 100%;
+        height: 100%;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        cursor: pointer;
+    }
+
+    &-control {
+        width: var(--radio-size);
+        height: var(--radio-size);
+        border-radius: 50%;
+
+        background-color: hsl(vars.$theme-bg-300);
+        border: vars.$border;
+
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &::before {
+            content: "";
+            width: 55%;
+            height: 55%;
+            transform: scale(0);
+            border-radius: 50%;
+            background-color: hsl(var(--radio-clr-fg, vars.$theme-bg-100));
+            transition: transform 0.1s ease-in-out;
+        }
+    }
+
+    // focus
+    input:focus-visible + &-control,
+    &.focused &-control {
+        outline: vars.$outline;
+    }
+
+    // hover (unchecked, enabled)
+    input:not(:checked, :disabled):hover + &-control {
+        background-color: hsl(vars.$theme-bg-400);
+    }
+
+    // checked
+    input:checked + &-control {
+        background-color: hsl(var(--radio-clr, vars.$theme-fg));
+        border-color: hsl(var(--radio-clr, vars.$theme-fg));
+
+        &::before {
+            transform: scale(1);
+        }
+    }
+
+    // sizes
+    @include mixins.each-size($radio-sizes) using ($name, $size) {
+        --radio_size: #{$size};
+    }
+
+    // colors
+    @include mixins.each-color("radio");
+
+    @include mixins.reduced-motion {
+        &-control::before {
+            transition: none;
+        }
+    }
+}

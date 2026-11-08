@@ -1,0 +1,132 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$switch-sizes: (
+    "xs": 3.5,
+    "sm": 4,
+    "md": 5,
+    "lg": 6,
+    "xl": 7,
+);
+
+@mixin switch-size($size) {
+    --switch_size: #{fn.require($switch-sizes, $size)};
+}
+
+.switch {
+    @include switch-size("md");
+
+    --switch-size: calc(#{vars.$ctrl-size} * var(--switch_size));
+    --switch-track-w: calc((var(--switch-size) * 2) - 0.25rem);
+    --switch-track-h: var(--switch-size);
+    --switch-rds: calc(#{vars.$ctrl-radius} * 12);
+    --switch-gap: 2px;
+    --switch-inset: calc(#{vars.$border-width} + var(--switch-gap));
+    --switch-thumb: calc(var(--switch-track-h) - (var(--switch-inset) * 2));
+    --switch-travel: calc(
+        var(--switch-track-w) - (var(--switch-inset) * 2) - var(--switch-thumb)
+    );
+    --switch-dir: 1;
+
+    display: inline-flex;
+    align-items: center;
+    gap: fn.space(2);
+
+    user-select: none;
+    position: relative;
+    width: fit-content;
+
+    input {
+        appearance: none;
+        width: 100%;
+        height: 100%;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        cursor: pointer;
+    }
+
+    &-control {
+        position: relative;
+        z-index: -1;
+
+        width: var(--switch-track-w);
+        height: var(--switch-track-h);
+
+        border: vars.$border;
+        border-radius: var(--switch-rds);
+        background-color: hsl(vars.$theme-bg-300);
+
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        transition:
+            background-color 0.15s ease,
+            border-color 0.15s ease;
+
+        @include mixins.rtl {
+            --switch-dir: -1;
+        }
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            inset-inline-start: var(--switch-gap);
+
+            width: var(--switch-thumb);
+            height: var(--switch-thumb);
+
+            border-radius: var(--switch-rds);
+            background-color: hsl(vars.$theme-fg-alt);
+
+            transform: translateY(-50%);
+            transition:
+                transform 0.2s ease,
+                background-color 0.15s ease;
+        }
+    }
+
+    // focus
+    input:focus-visible + &-control,
+    &.focused &-control {
+        outline: vars.$outline;
+    }
+
+    // hover (unchecked, enabled)
+    input:not(:checked, :disabled):hover + &-control {
+        background-color: hsl(vars.$theme-bg-400);
+    }
+
+    // checked
+    input:checked + &-control {
+        background-color: hsl(var(--switch-clr, vars.$theme-fg));
+        border-color: hsl(var(--switch-clr, vars.$theme-fg));
+
+        &::before {
+            background-color: hsl(var(--switch-clr-fg, vars.$theme-bg-100));
+            transform: translateY(-50%)
+                translateX(calc(var(--switch-travel) * var(--switch-dir)));
+        }
+    }
+
+    // sizes
+    @include mixins.each-size($switch-sizes) using ($name, $value) {
+        @include switch-size($name);
+    }
+
+    // colors
+    @include mixins.each-color("switch");
+
+    @include mixins.reduced-motion {
+        &-control,
+        &-control::before {
+            transition: none;
+        }
+    }
+}

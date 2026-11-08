@@ -1,0 +1,175 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$table-sizes: (
+    "xs": (
+        fs: 0.6875,
+        py: 1,
+        px: 2,
+    ),
+    "sm": (
+        fs: 0.8125,
+        py: 1.5,
+        px: 2.5,
+    ),
+    "md": (
+        fs: 0.875,
+        py: 2,
+        px: 3,
+    ),
+    "lg": (
+        fs: 1,
+        py: 2.5,
+        px: 3.5,
+    ),
+    "xl": (
+        fs: 1.0625,
+        py: 3,
+        px: 4,
+    ),
+);
+
+@mixin table-size($size) {
+    $p: fn.require($table-sizes, $size);
+
+    --table_fs: #{fn.require($p, fs)};
+    --table_py: #{fn.require($p, py)};
+    --table_px: #{fn.require($p, px)};
+}
+
+.table {
+    @include table-size("md");
+
+    --table-fs: calc(1rem * var(--table_fs));
+    --table-py: calc(#{vars.$field-size} * var(--table_py));
+    --table-px: calc(#{vars.$field-size} * var(--table_px));
+
+    width: 100%;
+    color: hsl(vars.$theme-fg);
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-radius: calc(vars.$box-radius * 1.5);
+
+    table {
+        width: 100%;
+
+        tbody tr {
+            transition: background-color 0.1s ease;
+
+            @include mixins.reduced-motion {
+                transition: none;
+            }
+        }
+
+        :where(thead, tfoot) {
+            background-color: hsl(vars.$theme-bg-200);
+            color: hsl(vars.$theme-fg-alt);
+        }
+
+        :where(th, td) {
+            padding: var(--table-py) var(--table-px);
+            font-size: var(--table-fs);
+            text-align: start;
+            vertical-align: middle;
+        }
+
+        :where(th) {
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        :where(thead, tfoot) :where(th) {
+            font-size: calc(var(--table-fs) * 0.9);
+        }
+
+        :where(thead tr > *) {
+            border-bottom: vars.$border;
+        }
+
+        :where(tbody tr:not(:last-child) > *) {
+            border-bottom: vars.$border;
+        }
+
+        :where(tfoot tr > *) {
+            border-top: vars.$border;
+        }
+
+        // caption
+        caption {
+            padding: var(--table-py) var(--table-px);
+            font-size: calc(var(--table-fs) * 0.9);
+            color: hsl(vars.$theme-fg-alt);
+            text-align: start;
+            caption-side: top;
+            font-weight: 500;
+        }
+    }
+
+    &.stripe tbody tr:nth-child(even) {
+        background-color: hsl(vars.$theme-bg-200);
+    }
+
+    // bordered grid
+    &.outline {
+        border: vars.$border;
+
+        :where(th, td) {
+            border: vars.$border;
+        }
+
+        // outer edges come from the wrapper border
+        :where(tr > :first-child) {
+            border-inline-start-color: transparent;
+        }
+
+        :where(tr > :last-child) {
+            border-inline-end-color: transparent;
+        }
+
+        :where(thead tr > *, tbody:first-child tr:first-child > *) {
+            border-top-color: transparent;
+        }
+
+        :where(tbody:last-child tr:last-child > *) {
+            border-bottom-color: transparent;
+        }
+
+        :where(tfoot tr > *) {
+            border-bottom-color: transparent;
+        }
+    }
+
+    tr:is(.selected, [aria-selected="true"]) :where(th, td),
+    :where(th, td).selected {
+        background-color: hsl(vars.$theme-fg / 0.07);
+    }
+
+    &.hoverable {
+        tbody tr {
+            cursor: pointer;
+
+            &:focus-visible {
+                outline: vars.$outline;
+                outline-offset: calc(vars.$outline-width * -1);
+            }
+        }
+
+        tbody tr:not(.selected, [aria-selected="true"]) {
+            @media (hover: hover) {
+                &:hover {
+                    background-color: hsl(vars.$theme-fg / 0.05);
+                }
+            }
+
+            &:active {
+                background-color: hsl(vars.$theme-fg / 0.08);
+            }
+        }
+    }
+
+    // sizes
+    @include mixins.each-size($table-sizes) using ($name, $value) {
+        @include table-size($name);
+    }
+}

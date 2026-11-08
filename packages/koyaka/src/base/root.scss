@@ -1,0 +1,109 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../themes/dark" as *;
+@use "../themes/light" as *;
+
+:root {
+    @each $name, $value in vars.$tokens {
+        --#{$name}: #{$value};
+    }
+
+    @include theme-dark;
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not(.theme-dark, [data-theme]) {
+        @include theme-light;
+    }
+}
+
+.theme-light,
+[data-theme="light"] {
+    @include theme-light;
+}
+
+*,
+::after,
+::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+* {
+    border: none;
+    outline: none;
+    background: none;
+    text-decoration: none;
+
+    scrollbar-width: thin;
+    scrollbar-color: hsl(vars.$theme-fg / 0.3) transparent;
+    outline-offset: calc(vars.$outline-width / 2);
+}
+
+html,
+:host {
+    font-family: vars.$font-family;
+    font-size: 16px;
+    line-height: 1.5;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    background-color: hsl(vars.$theme-bg-100);
+    color: hsl(vars.$theme-fg);
+}
+
+code,
+pre,
+kbd,
+samp {
+    font-family: vars.$font-family-mono;
+    font-size: 0.9em;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+    display: block;
+}
+
+img,
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+iframe {
+    border: 0;
+}
+
+hr {
+    width: 100%;
+    margin: fn.space(2) 0;
+    border-top: vars.$border;
+}
+
+:disabled,
+.disabled,
+[disabled] {
+    opacity: 0.5;
+    user-select: none;
+    pointer-events: none;
+}

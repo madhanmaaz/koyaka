@@ -1,0 +1,54 @@
+@use "../abstracts/mixins";
+
+.indicator {
+    --indicator-offset: 50%;
+
+    position: relative;
+    display: inline-block;
+
+    &-item {
+        --indicator-flip: 1;
+        --indicator-x: -50%;
+        --indicator-y: -50%;
+
+        position: absolute;
+        z-index: 1;
+
+        /* default: middle center */
+        inset-block-start: 50%;
+        inset-block-end: auto;
+        inset-inline-start: 50%;
+        inset-inline-end: auto;
+
+        transform: translate(
+            calc(var(--indicator-x) * var(--indicator-flip)),
+            var(--indicator-y)
+        );
+
+        &.top {
+            --indicator-y: calc(-1 * var(--indicator-offset));
+            inset-block-start: 0;
+        }
+
+        &.bottom {
+            --indicator-y: var(--indicator-offset);
+            inset-block-start: auto;
+            inset-block-end: 0;
+        }
+
+        &.start {
+            --indicator-x: calc(-1 * var(--indicator-offset));
+            inset-inline-start: 0;
+        }
+
+        &.end {
+            --indicator-x: var(--indicator-offset);
+            inset-inline-start: auto;
+            inset-inline-end: 0;
+        }
+
+        @include mixins.rtl {
+            --indicator-flip: -1;
+        }
+    }
+}

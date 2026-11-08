@@ -1,0 +1,52 @@
+{
+    "name": "koyaka",
+    "version": "0.1.0",
+    "description": "Koyaka is a modern CSS for building responsive, customizable, and user interfaces.",
+    "homepage": "https://koyaka.netlify.app",
+    "license": "MIT",
+    "funding": "https://github.com/madhanmaaz/koyaka?sponsor=1",
+    "author": {
+        "name": "madhanmaaz",
+        "url": "https://madhanmaaz.netlify.app/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/madhanmaaz/koyaka.git",
+        "directory": "packages/koyaka"
+    },
+    "bugs": {
+        "url": "https://github.com/madhanmaaz/koyaka/issues"
+    },
+    "files": [
+        "dist",
+        "license",
+        "readme.md"
+    ],
+    "style": "dist/koyaka.all.css",
+    "browser": "./dist/koyaka.all.css",
+    "keywords": [
+        "koyaka",
+        "koyakaUI",
+        "koyakaCss",
+        "css-library",
+        "ui-library",
+        "css-framework",
+        "css-components",
+        "ui-components",
+        "utility-css",
+        "lightweight-css",
+        "modern-css",
+        "responsive-css",
+        "minimal-css",
+        "customizable-css",
+        "design-system",
+        "frontend",
+        "web-design",
+        "web-components",
+        "style-library",
+        "component-library",
+        "ui-kit",
+        "ui-tools",
+        "css-utilities"
+    ]
+}

@@ -1,0 +1,35 @@
+@use "../abstracts/variables" as vars;
+
+// text: foreground
+.text-fg {
+    color: hsl(vars.$theme-fg);
+}
+
+.text-fg-alt {
+    color: hsl(vars.$theme-fg-alt);
+}
+
+// text: semantic colors and their fg colors
+@each $color in vars.$colors {
+    .text-#{$color} {
+        color: hsl(var(--#{$color}));
+    }
+
+    .text-#{$color}-fg {
+        color: hsl(var(--#{$color}-fg));
+    }
+}
+
+// bg: base surfaces
+@each $level in (100, 200, 300, 400) {
+    .bg-#{$level} {
+        background-color: hsl(var(--bg-#{$level}));
+    }
+}
+
+// bg: semantic colors
+@each $color in vars.$colors {
+    .bg-#{$color} {
+        background-color: hsl(var(--#{$color}));
+    }
+}
