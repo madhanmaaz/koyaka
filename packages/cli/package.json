@@ -1,0 +1,54 @@
+{
+    "name": "koyaka-cli",
+    "version": "0.0.1",
+    "description": "Koyaka CLI - Command-line interface for the Koyaka.",
+    "homepage": "https://koyaka.netlify.app",
+    "license": "MIT",
+    "funding": "https://github.com/madhanmaaz/koyaka?sponsor=1",
+    "author": {
+        "name": "madhanmaaz",
+        "url": "https://madhanmaaz.netlify.app/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/madhanmaaz/koyaka.git",
+        "directory": "packages/cli"
+    },
+    "bugs": {
+        "url": "https://github.com/madhanmaaz/koyaka/issues"
+    },
+    "files": [
+        "src",
+        "license",
+        "readme.md"
+    ],
+    "bin": {
+        "koyaka": "./src/index.js"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "dependencies": {
+        "commander": "^15.0.0",
+        "cross-spawn": "^7.0.6",
+        "picocolors": "^1.1.1",
+        "prompts": "^2.4.2"
+    },
+    "keywords": [
+        "koyaka",
+        "koyaka-cli",
+        "cli",
+        "ui-framework",
+        "css-framework",
+        "css-library",
+        "ui-library",
+        "component-library",
+        "design-system",
+        "frontend",
+        "web-development",
+        "developer-tools",
+        "scaffolding",
+        "project-generator",
+        "web-components"
+    ]
+}
