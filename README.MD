@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/madhanmaaz/koyaka/master/logo.webp" height="300">
+    <img src="https://raw.githubusercontent.com/madhanmaaz/koyaka/master/assets/logo.webp" height="250">
 </p>
 <h1 align="center">Koyaka</h1>
 

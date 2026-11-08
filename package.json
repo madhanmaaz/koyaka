@@ -3,12 +3,13 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "dev:koyaka": "node ./scripts/build-koyaka.js --dev",
-        "build:koyaka": "node ./scripts/build-koyaka.js",
-        "dev:vanilla": "node ./scripts/build-vanilla.js --dev",
-        "build:vanilla": "node ./scripts/build-vanilla.js",
-        "build:registry": "node ./scripts/build-registry.js",
-        "build": "npm run build:koyaka && npm run build:vanilla && npm run build:registry"
+        "dev:koyaka": "node scripts/build-koyaka.js --dev",
+        "dev:vanilla": "node scripts/build-vanilla.js --dev",
+        "build": "npm run build:koyaka && npm run build:vanilla && npm run build:registry",
+        "build:koyaka": "node scripts/build-koyaka.js",
+        "build:vanilla": "node scripts/build-vanilla.js",
+        "build:registry": "node scripts/build-registry.js",
+        "check:registry": "node scripts/build-registry.js --check"
     },
     "devDependencies": {
         "chokidar": "^5.0.0",
