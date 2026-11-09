@@ -33,9 +33,24 @@ $card-stack-exclude: ();
     }
 }
 
+.card-frame {
+    --card_frame_rds: 1.5;
+
+    --card-frame-rds: calc(#{vars.$box-radius} * var(--card_frame_rds));
+
+    border: vars.$border;
+    border-radius: var(--card-frame-rds);
+    background-color: hsl(vars.$theme-bg-300);
+
+    &-header,
+    &-footer {
+        padding: calc(#{vars.$box-size} * 2);
+    }
+}
+
 .card {
     --card_p: 2;
-    --card_rds: 1.5;
+    --card_rds: var(--card_frame_rds, 1.5);
 
     --card-bg: var(--card-clr, #{vars.$theme-bg-200});
     --card-fg: var(--card-clr-fg, #{vars.$theme-fg});

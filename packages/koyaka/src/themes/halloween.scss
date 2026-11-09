@@ -1,0 +1,61 @@
+@use "../abstracts/mixins";
+
+.theme-halloween,
+[data-theme="halloween"] {
+    color-scheme: dark;
+
+    --box-sz: 0.6rem;
+    --field-sz: 0.3rem;
+    --ctrl-sz: 0.3rem;
+
+    --box-rds: 0.875rem;
+    --field-rds: 0.45rem;
+    --ctrl-rds: 0.25rem;
+
+    @include mixins.create-theme(
+        (
+            bg: (
+                270 15% 5%,
+                270 14% 8%,
+                270 12% 12%,
+                270 10% 18%,
+            ),
+            fg: (
+                30 30% 92%,
+                30 15% 65%,
+            ),
+            primary: (
+                28 100% 55%,
+                28 70% 10%,
+            ),
+            secondary: (
+                280 60% 55%,
+                280 40% 10%,
+            ),
+            accent: (
+                95 80% 50%,
+                95 50% 10%,
+            ),
+            neutral: (
+                260 8% 45%,
+                260 12% 90%,
+            ),
+            info: (
+                200 70% 60%,
+                200 50% 10%,
+            ),
+            success: (
+                120 50% 45%,
+                120 40% 10%,
+            ),
+            warning: (
+                35 100% 55%,
+                35 70% 10%,
+            ),
+            error: (
+                0 75% 55%,
+                0 60% 12%,
+            ),
+        )
+    );
+}

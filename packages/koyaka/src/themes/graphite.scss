@@ -1,0 +1,61 @@
+@use "../abstracts/mixins";
+
+.theme-graphite,
+[data-theme="graphite"] {
+    color-scheme: dark;
+
+    --box-sz: 0.5rem;
+    --field-sz: 0.25rem;
+    --ctrl-sz: 0.25rem;
+
+    --box-rds: 0.375rem;
+    --field-rds: 0.25rem;
+    --ctrl-rds: 0.125rem;
+
+    @include mixins.create-theme(
+        (
+            bg: (
+                220 8% 8%,
+                220 7% 11%,
+                220 6% 15%,
+                220 6% 20%,
+            ),
+            fg: (
+                210 15% 92%,
+                210 8% 60%,
+            ),
+            primary: (
+                220 12% 65%,
+                220 20% 10%,
+            ),
+            secondary: (
+                220 8% 35%,
+                210 15% 92%,
+            ),
+            accent: (
+                200 25% 58%,
+                200 30% 10%,
+            ),
+            neutral: (
+                220 6% 45%,
+                210 15% 92%,
+            ),
+            info: (
+                210 40% 60%,
+                210 30% 10%,
+            ),
+            success: (
+                140 25% 50%,
+                140 30% 10%,
+            ),
+            warning: (
+                40 60% 55%,
+                40 40% 10%,
+            ),
+            error: (
+                0 50% 60%,
+                0 40% 12%,
+            ),
+        )
+    );
+}

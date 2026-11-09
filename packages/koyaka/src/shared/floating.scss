@@ -1,16 +1,17 @@
 .floating {
-    --floating-dur: 0.15s;
+    --floating-speed: 0.15s;
     --floating-ease: ease;
 
+    position: fixed;
     top: 0;
     left: 0;
 
     will-change: transform, opacity;
 
-    animation: floating-in var(--floating-dur) var(--floating-ease) forwards;
+    animation: floating-in var(--floating-speed) var(--floating-ease) forwards;
 
     &.closing {
-        animation: floating-out var(--floating-dur) var(--floating-ease)
+        animation: floating-out var(--floating-speed) var(--floating-ease)
             forwards;
     }
 }

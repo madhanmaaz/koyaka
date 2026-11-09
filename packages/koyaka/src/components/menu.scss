@@ -266,6 +266,12 @@ $menu-sizes: (
         border-radius: fn.to-rem(2px);
     }
 
+    .menu-popover:not(.hoverable) > .menu-popover-trigger::after {
+        border-width: fn.to-rem(2px);
+        border-top-color: hsl(var(--menu-item-fg));
+        border-right-color: hsl(var(--menu-item-fg));
+    }
+
     .menu-popover.active > .menu-popover-trigger {
         --menu-item-bg: var(--menu-clr) / 0.07;
     }
@@ -275,7 +281,6 @@ $menu-sizes: (
         flex-direction: column;
         gap: fn.space(1);
 
-        position: absolute;
         z-index: fn.zindex("menu-popover");
     }
 

@@ -1,0 +1,61 @@
+@use "../abstracts/mixins";
+
+.theme-dusk,
+[data-theme="dusk"] {
+    color-scheme: dark;
+
+    --box-sz: 0.55rem;
+    --field-sz: 0.3rem;
+    --ctrl-sz: 0.3rem;
+
+    --box-rds: 0.75rem;
+    --field-rds: 0.4rem;
+    --ctrl-rds: 0.25rem;
+
+    @include mixins.create-theme(
+        (
+            bg: (
+                240 8% 7%,
+                240 8% 9%,
+                240 8% 12%,
+                240 8% 16%,
+            ),
+            fg: (
+                228 14% 93%,
+                240 6% 64%,
+            ),
+            primary: (
+                235 100% 81%,
+                235 30% 15%,
+            ),
+            secondary: (
+                235 100% 90%,
+                235 25% 20%,
+            ),
+            accent: (
+                173 100% 41%,
+                133 40% 15%,
+            ),
+            neutral: (
+                220 10% 60%,
+                220 15% 15%,
+            ),
+            info: (
+                199 100% 57%,
+                199 60% 15%,
+            ),
+            success: (
+                133 54% 53%,
+                133 40% 15%,
+            ),
+            warning: (
+                43 100% 58%,
+                43 60% 15%,
+            ),
+            error: (
+                353 100% 69%,
+                353 50% 20%,
+            ),
+        )
+    );
+}

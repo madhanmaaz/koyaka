@@ -50,3 +50,11 @@
         )
     );
 }
+
+:is(.theme-light, [data-theme="light"]) {
+    .alert.soft,
+    .alert.faded,
+    .alert.outline {
+        --alert-fg: var(--alert-clr-fg, var(--fg));
+    }
+}

@@ -3,7 +3,6 @@
 
 .popover {
     &-content {
-        position: absolute;
         z-index: fn.zindex("popover");
     }
 

@@ -1,0 +1,61 @@
+@use "../abstracts/mixins";
+
+.theme-cyberpunk,
+[data-theme="cyberpunk"] {
+    color-scheme: dark;
+
+    --box-sz: 0.4rem;
+    --field-sz: 0.2rem;
+    --ctrl-sz: 0.2rem;
+
+    --box-rds: 0rem;
+    --field-rds: 0rem;
+    --ctrl-rds: 0rem;
+
+    @include mixins.create-theme(
+        (
+            bg: (
+                260 30% 6%,
+                260 28% 9%,
+                260 26% 13%,
+                260 24% 18%,
+            ),
+            fg: (
+                260 15% 92%,
+                260 12% 65%,
+            ),
+            primary: (
+                300 90% 65%,
+                300 60% 10%,
+            ),
+            secondary: (
+                190 95% 60%,
+                190 60% 10%,
+            ),
+            accent: (
+                280 100% 70%,
+                280 60% 10%,
+            ),
+            neutral: (
+                250 8% 55%,
+                250 15% 10%,
+            ),
+            info: (
+                200 90% 60%,
+                200 60% 10%,
+            ),
+            success: (
+                140 80% 55%,
+                140 60% 10%,
+            ),
+            warning: (
+                40 100% 60%,
+                40 70% 10%,
+            ),
+            error: (
+                340 85% 65%,
+                340 60% 12%,
+            ),
+        )
+    );
+}

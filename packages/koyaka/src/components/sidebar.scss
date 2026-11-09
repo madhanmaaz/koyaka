@@ -13,6 +13,14 @@
     height: 100%;
     overflow: hidden;
 
+    &:not(.app-shell-pane) {
+        transition:
+            width var(--sidebar-speed) ease,
+            opacity var(--sidebar-speed) ease,
+            margin var(--sidebar-speed) ease,
+            padding var(--sidebar-speed) ease;
+    }
+
     &-row {
         display: flex;
         align-items: center;

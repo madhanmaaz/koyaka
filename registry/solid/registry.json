@@ -1,6 +1,6 @@
 {
     "framework": "solid",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "dependencies": [
         "solid-js"
     ],
@@ -315,6 +315,17 @@
             "files": [
                 "components/textarea/index.ts",
                 "components/textarea/textarea.tsx",
+                "helpers/types.ts",
+                "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "toggle": {
+            "files": [
+                "components/button/button.tsx",
+                "components/button/index.ts",
+                "components/toggle/index.ts",
+                "components/toggle/toggle.tsx",
                 "helpers/types.ts",
                 "helpers/utils.ts"
             ],

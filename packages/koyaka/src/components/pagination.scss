@@ -2,7 +2,7 @@
 @use "../abstracts/functions" as fn;
 
 .pagination {
-    --pagination-size: 2.25rem;
+    --pagination-btn-size: 2.25rem;
 
     display: flex;
     align-items: center;
@@ -19,8 +19,8 @@
         gap: fn.space(2);
 
         .btn {
-            min-width: var(--pagination-size);
-            height: var(--pagination-size);
+            min-width: var(--pagination-btn-size);
+            height: var(--pagination-btn-size);
             padding: 0;
 
             font-size: 0.875rem;
@@ -38,8 +38,8 @@
         align-items: center;
         justify-content: center;
 
-        min-width: var(--pagination-size);
-        height: var(--pagination-size);
+        min-width: var(--pagination-btn-size);
+        height: var(--pagination-btn-size);
 
         color: hsl(vars.$theme-fg-alt);
         user-select: none;

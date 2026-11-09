@@ -99,7 +99,7 @@ function getPopoverEngine(popover, trigger) {
 
 function closeSiblingPopovers(popover) {
     [...(popover.parentElement?.children ?? [])].forEach((sibling) => {
-        console.log(sibling)
+        console.log(sibling);
         if (sibling === popover) return;
         if (!classListContains(sibling, "menu-popover")) return;
 
@@ -139,7 +139,7 @@ function scheduleHoverClose(popover) {
 }
 
 function getHoverablePopover(menu, node) {
-    const popover = node?.closest?.('.menu-popover[data-trigger="hover"]');
+    const popover = node?.closest?.(".menu-popover.hoverable");
 
     return popover && menu.contains(popover) ? popover : null;
 }

@@ -15,7 +15,6 @@
         background-color: hsl(vars.$theme-bg-400);
         padding: calc(#{vars.$ctrl-size} * 0.5) calc(#{vars.$ctrl-size} * 1.5);
 
-        position: fixed;
         z-index: fn.zindex("tooltip");
 
         display: flex;

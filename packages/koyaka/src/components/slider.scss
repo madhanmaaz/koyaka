@@ -3,28 +3,58 @@
 @use "../abstracts/mixins";
 
 $slider-sizes: (
-    "xs": 0.5,
-    "sm": 0.75,
-    "md": 1,
-    "lg": 1.25,
-    "xl": 1.5,
+    "xs": (
+        h: 0.5,
+        rds: 1,
+        thumb-rds: 1.6,
+    ),
+    "sm": (
+        h: 0.75,
+        rds: 1.5,
+        thumb-rds: 1.8,
+    ),
+    "md": (
+        h: 1,
+        rds: 2,
+        thumb-rds: 2,
+    ),
+    "lg": (
+        h: 1.25,
+        rds: 2.5,
+        thumb-rds: 2.2,
+    ),
+    "xl": (
+        h: 1.5,
+        rds: 3,
+        thumb-rds: 2.4,
+    ),
 );
+
+@mixin slider-size($size) {
+    $props: fn.require($slider-sizes, $size);
+
+    --slider_h: #{fn.require($props, h)};
+    --slider_rds: #{fn.require($props, rds)};
+    --slider_thumb_rds: #{fn.require($props, thumb-rds)};
+}
 
 // vendor pseudo-elements can't share a selector list, so the shared part lives here
 @mixin slider-thumb {
     width: var(--slider-thumb);
     height: var(--slider-thumb);
-    border-radius: 50%;
+    border-radius: var(--slider-thumb-rds);
     background-color: hsl(var(--slider-clr));
 }
 
 .slider {
-    --slider_h: #{fn.require($slider-sizes, "md")};
+    @include slider-size("md");
 
     --slider-h: calc(#{vars.$ctrl-size} * var(--slider_h));
+    --slider-rds: calc(#{vars.$ctrl-radius} * var(--slider_rds));
     --slider-clr: #{vars.$theme-fg};
     --slider-track: #{vars.$theme-fg} / 0.15;
     --slider-thumb: calc(var(--slider-h) + 0.5rem);
+    --slider-thumb-rds: calc(#{vars.$ctrl-radius} * var(--slider_thumb_rds));
 
     // a 12px thumb is a small target for a finger
     @media (pointer: coarse) {
@@ -38,7 +68,7 @@ $slider-sizes: (
 
         width: 100%;
         overflow: hidden; // clips the 100vw fill extension (webkit)
-        border-radius: vars.$box-radius;
+        border-radius: var(--slider-rds);
         cursor: pointer;
 
         &:focus-visible {
@@ -85,7 +115,7 @@ $slider-sizes: (
     &:not(input) {
         position: relative;
         height: var(--slider-h);
-        border-radius: vars.$box-radius;
+        border-radius: var(--slider-rds);
         background-color: hsl(var(--slider-track));
     }
 
@@ -153,7 +183,7 @@ $slider-sizes: (
 
     // sizes
     @include mixins.each-size($slider-sizes) using ($name, $value) {
-        --slider_h: #{$value};
+        @include slider-size($name);
     }
 
     // colors

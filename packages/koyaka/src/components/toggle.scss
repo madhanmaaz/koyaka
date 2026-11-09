@@ -7,13 +7,14 @@
     // visually hidden but still focusable, so the toggle works from the keyboard
     input {
         appearance: none;
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
 
-        pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        cursor: pointer;
     }
 
     input:focus-visible ~ .btn {
