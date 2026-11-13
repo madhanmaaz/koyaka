@@ -1,6 +1,6 @@
 {
     "framework": "solid",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "dependencies": [
         "solid-js"
     ],
@@ -99,6 +99,15 @@
                 "helpers/types.ts",
                 "helpers/utils.ts",
                 "shared/floatingEngine.tsx"
+            ],
+            "dependencies": []
+        },
+        "dock": {
+            "files": [
+                "components/dock/dock.tsx",
+                "components/dock/index.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts"
             ],
             "dependencies": []
         },

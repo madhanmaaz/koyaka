@@ -1,6 +1,6 @@
 {
     "name": "koyaka",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Koyaka is a modern, open-source CSS library written in Sass. It is responsive and highly customizable.",
     "homepage": "https://koyaka.netlify.app",
     "license": "MIT",
