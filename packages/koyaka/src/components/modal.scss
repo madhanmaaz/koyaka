@@ -1,6 +1,6 @@
 @use "../abstracts/variables" as vars;
-@use "../abstracts/functions" as fn;
 @use "../abstracts/mixins";
+@use "../shared/overlay";
 
 $modal-sizes: (
     "sm": 22rem,
@@ -10,135 +10,44 @@ $modal-sizes: (
 );
 
 .modal {
+    @extend %overlay;
+
     --modal-p: calc(#{vars.$box-size} * 2);
     --modal-max-w: 32rem;
     --modal-max-h: 90dvh;
-    --modal-speed: 0.15s;
-    --sheet-speed: 0.3s;
-    --modal-ease-in: cubic-bezier(0.4, 0, 1, 1);
-    --modal-ease-out: cubic-bezier(0, 0, 0.2, 1);
 
-    // 1 = full motion, 0 = fade only (reduced motion)
-    --modal-motion: 1;
-
-    // sheet slide-from offsets (default: right)
-    --sheet-x: 100%;
-    --sheet-y: 0%;
-
-    position: fixed;
-    inset: 0;
-    z-index: fn.zindex("modal");
-
-    display: none;
     align-items: center;
     justify-content: center;
 
     padding: var(--modal-p);
 
-    &.active {
-        display: flex;
-    }
-
-    // backdrop
-    &-backdrop {
-        position: absolute;
-        inset: 0;
-        cursor: pointer;
-        background-color: rgba(9, 10, 12, 0.86);
-
-        &.blur {
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-        }
-
-        &.transparent {
-            background: none;
-        }
-    }
-
-    &.active .modal-backdrop {
-        animation: modal-backdrop-in var(--modal-speed) var(--modal-ease-out)
-            forwards;
-    }
-
-    &.closing .modal-backdrop {
-        animation: modal-backdrop-out var(--modal-speed) var(--modal-ease-in)
-            forwards;
-    }
-
-    // content
-    &-content {
-        position: relative;
+    > .overlay-content {
         transform-origin: center;
 
-        width: 100%;
         max-width: var(--modal-max-w);
         max-height: var(--modal-max-h);
 
         will-change: transform, opacity;
     }
 
-    &.active .modal-content {
-        animation: modal-in var(--modal-speed) var(--modal-ease-out) forwards;
+    &.active > .overlay-content {
+        animation: modal-in var(--overlay-speed) var(--overlay-ease-out)
+            forwards;
     }
 
-    &.closing .modal-content {
-        animation: modal-out var(--modal-speed) var(--modal-ease-in) forwards;
-    }
-
-    // close
-    > .modal-close {
-        position: absolute;
-        top: 0.75rem;
-        inset-inline-end: 0.75rem;
-        z-index: 5;
-    }
-
-    &-close {
-        flex-shrink: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-
-        width: 1.75rem;
-        height: 1.75rem;
-
-        color: hsl(vars.$theme-fg-alt);
-        border-radius: calc(#{vars.$field-radius} * 2.5);
-
-        cursor: pointer;
-        transition:
-            background-color 0.15s ease,
-            color 0.15s ease;
-
-        &::before {
-            content: "\00D7";
-            font-size: 1.8rem;
-            color: inherit;
-        }
-
-        &:hover {
-            background-color: hsl(#{vars.$theme-fg} / 0.08);
-            color: hsl(vars.$theme-fg);
-        }
-
-        &:active {
-            background-color: hsl(#{vars.$theme-fg} / 0.12);
-        }
-
-        &:focus-visible {
-            outline: vars.$outline;
-        }
+    &.closing > .overlay-content {
+        animation: modal-out var(--overlay-speed) var(--overlay-ease-in)
+            forwards;
     }
 
     // sizes
     @include mixins.each-size($modal-sizes) using ($name, $width) {
-        .modal-content {
+        > .overlay-content {
             --modal-max-w: #{$width};
         }
     }
 
-    &:where(.cover, .full) .modal-content {
+    &:where(.cover, .full) > .overlay-content {
         --modal-max-w: 100%;
         --modal-max-h: 100%;
 
@@ -166,107 +75,18 @@ $modal-sizes: (
         justify-content: flex-end;
     }
 
-    // sheet (default: slides from the right)
-    &.sheet {
-        padding: 0;
-        justify-content: flex-end;
-        align-items: stretch;
-
-        .modal-content {
-            --modal-max-w: 24rem;
-            --modal-max-h: 100dvh;
-
-            border-radius: 0;
-            border: none;
-            border-left: vars.$border;
-            background-color: hsl(vars.$theme-bg-200);
-        }
-
-        &.active .modal-content {
-            animation: sheet-in var(--sheet-speed) ease-out forwards;
-        }
-
-        &.closing .modal-content {
-            animation: sheet-out var(--sheet-speed) ease-out forwards;
-        }
-
-        &.left {
-            --sheet-x: -100%;
-
-            justify-content: flex-start;
-
-            .modal-content {
-                border: none;
-                border-right: vars.$border;
-            }
-        }
-
-        &.top {
-            --sheet-x: 0%;
-            --sheet-y: -100%;
-
-            align-items: flex-start;
-
-            .modal-content {
-                --modal-max-w: 100%;
-                --modal-max-h: none;
-
-                border: none;
-                border-bottom: vars.$border;
-            }
-        }
-
-        &.bottom {
-            --sheet-x: 0%;
-            --sheet-y: 100%;
-
-            justify-content: center;
-            align-items: flex-end;
-
-            .modal-content {
-                --modal-max-w: 100%;
-                --modal-max-h: none;
-
-                border: none;
-                border-top: vars.$border;
-            }
-        }
-    }
-
     // reduced motion: keep the fade, drop scale and slide
     @include mixins.reduced-motion {
-        --modal-motion: 0;
-
-        &-close {
-            transition: none;
-        }
+        --overlay-motion: 0;
     }
 }
 
 // animations
-@keyframes modal-backdrop-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes modal-backdrop-out {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}
-
 @keyframes modal-in {
     from {
         opacity: 0;
-        transform: scale(calc(1 - 0.04 * var(--modal-motion)))
-            translateY(calc(6px * var(--modal-motion)));
+        transform: scale(calc(1 - 0.04 * var(--overlay-motion)))
+            translateY(calc(6px * var(--overlay-motion)));
     }
     to {
         opacity: 1;
@@ -281,31 +101,7 @@ $modal-sizes: (
     }
     to {
         opacity: 0;
-        transform: scale(calc(1 - 0.04 * var(--modal-motion)))
-            translateY(calc(6px * var(--modal-motion)));
-    }
-}
-
-@keyframes sheet-in {
-    from {
-        transform: translate(
-            calc(var(--sheet-x) * var(--modal-motion)),
-            calc(var(--sheet-y) * var(--modal-motion))
-        );
-    }
-    to {
-        transform: translate(0, 0);
-    }
-}
-
-@keyframes sheet-out {
-    from {
-        transform: translate(0, 0);
-    }
-    to {
-        transform: translate(
-            calc(var(--sheet-x) * var(--modal-motion)),
-            calc(var(--sheet-y) * var(--modal-motion))
-        );
+        transform: scale(calc(1 - 0.04 * var(--overlay-motion)))
+            translateY(calc(6px * var(--overlay-motion)));
     }
 }

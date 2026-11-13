@@ -1,0 +1,51 @@
+@use "../abstracts/variables" as vars;
+
+// Scrollbar thumb is invisible until the element is hovered or focused.
+// Content stays scrollable at all times; only the thumb fades in.
+.scrollbar-hover {
+    --scrollbar-thumb: hsl(vars.$theme-fg / 0.3);
+    --scrollbar-thumb-hover: hsl(vars.$theme-fg / 0.5);
+
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+
+    &:hover,
+    &:focus-within {
+        scrollbar-color: var(--scrollbar-thumb) transparent;
+    }
+
+    // Older WebKit browsers without scrollbar-color support.
+    &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 999px;
+    }
+
+    &:hover::-webkit-scrollbar-thumb,
+    &:focus-within::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-thumb-hover);
+    }
+}
+
+// Always-visible thin scrollbar.
+.scrollbar-thin {
+    scrollbar-width: thin;
+}
+
+// Hides the scrollbar but keeps scrolling working.
+.scrollbar-none {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}

@@ -4,7 +4,7 @@
 <h1 align="center">Koyaka</h1>
 
 <p align="center">
-    Koyaka is a modern CSS for building responsive, customizable, and user interfaces.
+   Koyaka is a modern, open-source CSS library written in Sass. It is responsive and highly customizable. Works with plain HTML, React, Vue, SolidJS, or anything that renders HTML.
 </p>
 
 <p align="center">

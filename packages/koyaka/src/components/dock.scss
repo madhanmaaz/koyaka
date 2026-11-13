@@ -1,0 +1,138 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/functions" as fn;
+@use "../abstracts/mixins";
+
+$dock-sizes: (
+    "xs": (
+        py: 1.25,
+        px: 1,
+        fs: 0.75,
+    ),
+    "sm": (
+        py: 1.5,
+        px: 2,
+        fs: 0.8125,
+    ),
+    "md": (
+        py: 1.75,
+        px: 3,
+        fs: 0.875,
+    ),
+    "lg": (
+        py: 2,
+        px: 4,
+        fs: 1,
+    ),
+    "xl": (
+        py: 2.25,
+        px: 5,
+        fs: 1.0625,
+    ),
+);
+
+@mixin dock-size($size) {
+    $props: fn.require($dock-sizes, $size);
+
+    --dock_py: #{fn.require($props, py)};
+    --dock_px: #{fn.require($props, px)};
+    --dock_fs: #{fn.require($props, fs)};
+}
+
+.dock {
+    @include dock-size("md");
+
+    --dock-py: calc(#{vars.$field-size} * var(--dock_py));
+    --dock-px: calc(#{vars.$field-size} * var(--dock_px));
+    --dock-fs: calc(1rem * var(--dock_fs));
+
+    --dock-bg: #{vars.$theme-bg-200};
+    --dock-fg: #{vars.$theme-fg-alt};
+
+    display: flex;
+    width: 100%;
+    background-color: hsl(var(--dock-bg));
+
+    &-item {
+        flex: 1;
+        min-width: 0;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: fn.space(2);
+
+        padding: var(--dock-py) var(--dock-px);
+        font-size: calc(var(--dock-fs) - 0.125rem);
+        font-weight: 400;
+        line-height: 1;
+
+        color: hsl(var(--dock-fg));
+        background: none;
+        border: 0;
+        text-decoration: none;
+
+        cursor: pointer;
+        user-select: none;
+
+        &:focus-visible {
+            outline: vars.$outline;
+        }
+
+        &.active {
+            --dock-fg: #{vars.$theme-fg};
+        }
+
+        &.disabled,
+        &:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    }
+
+    &-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: var(--dock-py) var(--dock-px);
+        font-size: var(--dock-fs);
+        border: vars.$border-width solid transparent;
+        border-radius: vars.$box-radius;
+
+        transition:
+            background-color 0.15s ease,
+            border-color 0.15s ease,
+            color 0.15s ease;
+    }
+
+    &-item:hover &-icon {
+        background-color: hsl(#{vars.$theme-fg} / 0.04);
+    }
+
+    &-item.active &-icon {
+        color: hsl(var(--dock-clr, #{vars.$theme-fg}));
+        background-color: hsl(#{vars.$theme-bg-300});
+        border-color: hsl(#{vars.$border-color});
+    }
+
+    &-label {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    // sizes
+    @include mixins.each-size($dock-sizes) using ($name, $value) {
+        @include dock-size($name);
+    }
+
+    // colors
+    @include mixins.each-color("dock");
+
+    @include mixins.reduced-motion {
+        &-icon {
+            transition: none;
+        }
+    }
+}

@@ -1,0 +1,26 @@
+// element (e.g. `hsl(var(--bg-100) / 0.6)`) to be visible.
+
+.blur {
+    --blur-amount: 22px;
+    --blur-saturate: 380%;
+    --blur-brightness: 1.08;
+
+    -webkit-backdrop-filter: saturate(var(--blur-saturate))
+        blur(var(--blur-amount)) brightness(var(--blur-brightness));
+    backdrop-filter: saturate(var(--blur-saturate)) blur(var(--blur-amount))
+        brightness(var(--blur-brightness));
+}
+
+// Removes the effect, e.g. `blur md:blur-none` style overrides.
+.blur-none {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+// Respect the OS "reduce transparency" setting.
+@media (prefers-reduced-transparency: reduce) {
+    .blur {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+}

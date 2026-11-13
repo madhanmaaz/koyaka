@@ -1,21 +1,28 @@
 import {
+    createComputed,
     createContext,
     createEffect,
     createMemo,
     createSignal,
+    on,
     onCleanup,
+    splitProps,
     useContext,
 } from "solid-js";
-import type { ParentProps } from "solid-js";
+import type { JSX, ParentProps } from "solid-js";
 
-import { getAnimations, lockScroll, unlockScroll } from "../helpers/utils";
+import { cn, getAnimations, lockScroll, unlockScroll } from "../helpers/utils";
 import { globalEscapeStack } from "../helpers/escapeStack";
 import { addGlobalEvent } from "../helpers/events";
 
 type OverlayOnActionType = "close" | "none";
+type OverlayBackdropVariant = "blur" | "transparent";
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 interface OverlayContextValue {
+    /** The requested state. Flips to false as soon as a close is requested. */
+    isOpen: () => boolean;
+    /** Rendered state. Stays true while the close animation plays. */
     isActive: () => boolean;
     isClosing: () => boolean;
 
@@ -23,7 +30,7 @@ interface OverlayContextValue {
     hide: () => void;
     toggle: () => void;
 
-    setRootRef: (el: HTMLElement) => void;
+    setRootRef: (el: HTMLElement | undefined) => void;
 }
 
 const OverlayContext = createContext<OverlayContextValue>();
@@ -43,6 +50,13 @@ interface OverlayEngineProps {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
     defaultOpen?: boolean;
+}
+
+type OverlayTriggerProps = JSX.HTMLAttributes<HTMLSpanElement>;
+type OverlayCloseProps = JSX.HTMLAttributes<HTMLSpanElement>;
+
+interface OverlayBackdropProps extends JSX.HTMLAttributes<HTMLDivElement> {
+    variant?: OverlayBackdropVariant;
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -81,13 +95,17 @@ function OverlayEngine(props: ParentProps<OverlayEngineProps>) {
     const [internalOpen, setInternalOpen] = createSignal(
         props.defaultOpen ?? false,
     );
-    const [isClosing, setIsClosing] = createSignal(false);
 
-    // stays true while the close animation plays
-    const isActive = () =>
+    const isOpen = () =>
         isControlled() ? (props.open as boolean) : internalOpen();
 
+    // rendered from open until the close animation ends
+    const [isActive, setIsActive] = createSignal(isOpen());
+    const [isClosing, setIsClosing] = createSignal(false);
+
     function setOpen(value: boolean) {
+        if (value === isOpen()) return;
+
         if (!isControlled()) setInternalOpen(value);
         props.onOpenChange?.(value);
     }
@@ -95,55 +113,59 @@ function OverlayEngine(props: ParentProps<OverlayEngineProps>) {
     // ─── Ref ──────────────────────────────────────────────────────────────────
     let root: HTMLElement | undefined;
 
-    const setRootRef = (el: HTMLElement) => {
+    const setRootRef = (el: HTMLElement | undefined) => {
         root = el;
     };
 
-    // ─── Actions ──────────────────────────────────────────────────────────────
-    // bumped on every re-open / dispose, so a stale animation callback can't close it
+    // ─── Open / close lifecycle ───────────────────────────────────────────────
+    // Follows `isOpen`, so uncontrolled, controlled and an externally flipped
+    // `open` prop all get the same close animation.
+    // bumped on every change and on dispose, so a stale animation callback
+    // can't close an overlay that was re-opened in the meantime
     let closeToken = 0;
 
-    function show() {
-        if (isClosing()) {
-            // re-opened mid close-animation: cancel the pending close
-            closeToken++;
-            setIsClosing(false);
-            return;
-        }
+    createComputed(
+        on(isOpen, (open) => {
+            const token = ++closeToken;
 
-        if (!isActive()) setOpen(true);
-    }
+            if (open) {
+                setIsClosing(false);
+                setIsActive(true);
+                return;
+            }
 
-    function hide() {
-        if (!isActive() || isClosing()) return;
+            if (!isActive()) return;
 
-        if (!root) {
-            setOpen(false);
-            return;
-        }
+            // .closing reaches the DOM before the microtask below runs
+            setIsClosing(true);
 
-        const token = ++closeToken;
-        setIsClosing(true); // set .closing before getAnimations
-        const { hasAnimations, allSettled } = getAnimations(root, {
-            subtree: true,
-        });
+            queueMicrotask(() => {
+                if (token !== closeToken) return;
 
-        if (!hasAnimations) {
-            setOpen(false);
-            return;
-        }
+                const finish = () => {
+                    if (token !== closeToken) return;
 
-        allSettled(() => {
-            if (token !== closeToken) return;
+                    setIsClosing(false);
+                    setIsActive(false);
+                };
 
-            setIsClosing(false);
-            setOpen(false);
-        });
-    }
+                const animations = root
+                    ? getAnimations(root, { subtree: true })
+                    : undefined;
 
-    function toggle() {
-        isActive() && !isClosing() ? hide() : show();
-    }
+                if (animations?.hasAnimations) {
+                    animations.allSettled(finish);
+                } else {
+                    finish();
+                }
+            });
+        }),
+    );
+
+    // ─── Actions ──────────────────────────────────────────────────────────────
+    const show = () => setOpen(true);
+    const hide = () => setOpen(false);
+    const toggle = () => setOpen(!isOpen());
 
     // ─── Focus ────────────────────────────────────────────────────────────────
     function focusInside() {
@@ -209,7 +231,7 @@ function OverlayEngine(props: ParentProps<OverlayEngineProps>) {
         onCleanup(unlockScroll);
     });
 
-    // listeners, escape stack and focus follow the state (controlled and defaultOpen work too)
+    // listeners, escape stack and focus follow the state
     const isListening = createMemo(() => isActive() && !isClosing());
 
     createEffect(() => {
@@ -242,6 +264,7 @@ function OverlayEngine(props: ParentProps<OverlayEngineProps>) {
     return (
         <OverlayContext.Provider
             value={{
+                isOpen,
                 isActive,
                 isClosing,
                 show,
@@ -256,5 +279,102 @@ function OverlayEngine(props: ParentProps<OverlayEngineProps>) {
     );
 }
 
-export { useOverlay, OverlayEngine };
-export type { OverlayEngineProps, OverlayContextValue };
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+// keeps the user's own handler working (function or [handler, data])
+function callHandler<E extends Event>(handler: unknown, e: E) {
+    if (typeof handler === "function") {
+        handler(e);
+    } else if (Array.isArray(handler)) {
+        handler[0](handler[1], e);
+    }
+}
+
+// ─── Parts ────────────────────────────────────────────────────────────────────
+interface PressableProps extends JSX.HTMLAttributes<HTMLSpanElement> {
+    onPress: () => void;
+}
+
+// a non-button element that acts like a button: click, Enter and Space
+function Pressable(props: PressableProps) {
+    const [local, others] = splitProps(props, [
+        "onPress",
+        "onClick",
+        "onKeyDown",
+    ]);
+
+    return (
+        <span
+            role="button"
+            tabindex={0}
+            {...others}
+            onClick={(e) => {
+                callHandler(local.onClick, e);
+                if (!e.defaultPrevented) local.onPress();
+            }}
+            onKeyDown={(e) => {
+                callHandler(local.onKeyDown, e);
+                if (e.defaultPrevented) return;
+
+                // a real <button> inside handles its own keys
+                if (e.target !== e.currentTarget) return;
+
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    local.onPress();
+                }
+            }}
+        />
+    );
+}
+
+function OverlayTrigger(props: OverlayTriggerProps) {
+    const { toggle, isOpen } = useOverlay();
+
+    return (
+        <Pressable
+            aria-haspopup="dialog"
+            aria-expanded={isOpen()}
+            {...props}
+            onPress={toggle}
+        />
+    );
+}
+
+function OverlayClose(props: OverlayCloseProps) {
+    const { hide } = useOverlay();
+
+    return <Pressable {...props} onPress={hide} />;
+}
+
+function OverlayBackdrop(props: OverlayBackdropProps) {
+    const [local, others] = splitProps(props, ["class", "variant", "onClick"]);
+    const { hide } = useOverlay();
+
+    return (
+        <div
+            aria-hidden="true"
+            {...others}
+            class={cn("overlay-backdrop", local.variant, local.class)}
+            onClick={(e) => {
+                callHandler(local.onClick, e);
+                if (!e.defaultPrevented) hide();
+            }}
+        />
+    );
+}
+
+export {
+    useOverlay,
+    OverlayEngine,
+    OverlayTrigger,
+    OverlayClose,
+    OverlayBackdrop,
+};
+export type {
+    OverlayEngineProps,
+    OverlayContextValue,
+    OverlayTriggerProps,
+    OverlayCloseProps,
+    OverlayBackdropProps,
+    OverlayBackdropVariant,
+};

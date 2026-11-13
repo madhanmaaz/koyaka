@@ -26,7 +26,7 @@ $tokens: (
     "ff":
         'var(--app-ff, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
     "ff-mono":
-        'var(--app-ff-mono, ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace)'
+        'var(--app-ff-mono, ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace)',
 );
 
 @function -ref($name) {
@@ -63,8 +63,8 @@ $z-index: (
     "context-menu": 1010,
     "popover": 1020,
     "tooltip": 1030,
-    "app-shell-header": 1031,
-    "modal": 1040,
+    "app-shell-header": 1040,
+    "overlay": 1050,
 );
 
 // breakpoints

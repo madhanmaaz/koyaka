@@ -35,8 +35,7 @@ const ON_ACTIONS = new Set(Object.values(ON_ACTION));
 const openOverlays = [];
 
 export class OverlayEngine {
-    constructor({ name, root, onEscape = ON_ACTION.CLOSE }) {
-        this.name = name;
+    constructor({ root, onEscape = ON_ACTION.CLOSE }) {
         this.root = root;
 
         const requestedOnEscape = getDataset(root, "onEscape", onEscape);

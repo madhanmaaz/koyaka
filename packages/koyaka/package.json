@@ -1,7 +1,7 @@
 {
     "name": "koyaka",
     "version": "0.2.0",
-    "description": "Koyaka is a modern CSS for building responsive, customizable, and user interfaces.",
+    "description": "Koyaka is a modern, open-source CSS library written in Sass. It is responsive and highly customizable.",
     "homepage": "https://koyaka.netlify.app",
     "license": "MIT",
     "funding": "https://github.com/madhanmaaz/koyaka?sponsor=1",
@@ -23,7 +23,7 @@
         "readme.md"
     ],
     "style": "dist/koyaka.all.css",
-    "browser": "./dist/koyaka.all.css",
+    "browser": "dist/koyaka.all.css",
     "keywords": [
         "koyaka",
         "koyakaUI",
@@ -37,16 +37,18 @@
         "lightweight-css",
         "modern-css",
         "responsive-css",
-        "minimal-css",
         "customizable-css",
         "design-system",
         "frontend",
-        "web-design",
-        "web-components",
-        "style-library",
-        "component-library",
-        "ui-kit",
-        "ui-tools",
-        "css-utilities"
+        "css-utilities",
+        "css",
+        "sass",
+        "scss",
+        "css-library",
+        "ui",
+        "components",
+        "design-system",
+        "responsive",
+        "framework-agnostic"
     ]
 }

@@ -38,12 +38,19 @@ $menu-sizes: (
     --menu_item_fs: #{fn.require($props, fs)};
 }
 
+%menu-base {
+    display: flex;
+    flex-direction: column;
+    gap: var(--menu-gap);
+}
+
 .menu {
     @include menu-size("md");
 
     --menu-item-p: calc(#{vars.$field-size} * var(--menu_item_p));
     --menu-item-rds: calc(#{vars.$field-radius} * var(--menu_item_rds));
     --menu-item-fs: calc(1rem * var(--menu_item_fs));
+    --menu-gap: #{fn.space(0.5)};
 
     --menu-clr: #{vars.$theme-fg};
     --menu-clr-fg: #{vars.$theme-bg-100};
@@ -52,9 +59,7 @@ $menu-sizes: (
     --menu-item-fg: #{vars.$theme-fg};
     --menu-item-bc: #{vars.$transparent};
 
-    display: flex;
-    flex-direction: column;
-    gap: fn.space(1);
+    @extend %menu-base;
 
     // menu action
     &-action {
@@ -205,9 +210,7 @@ $menu-sizes: (
 
     // menu-tree
     &-tree {
-        display: flex;
-        flex-direction: column;
-        gap: fn.space(1);
+        @extend %menu-base;
 
         border-inline-start: vars.$border;
         margin: 0.2rem 0;
@@ -216,6 +219,10 @@ $menu-sizes: (
     }
 
     // collapsible
+    details {
+        @extend %menu-base;
+    }
+
     summary.menu-action {
         padding-inline-end: 1.8rem;
     }
@@ -277,9 +284,8 @@ $menu-sizes: (
     }
 
     .menu-popover-content {
+        @extend %menu-base;
         display: none;
-        flex-direction: column;
-        gap: fn.space(1);
 
         z-index: fn.zindex("menu-popover");
     }

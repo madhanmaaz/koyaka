@@ -3,7 +3,7 @@ const version = __APP_VERSION__;
 import { accordionHandler } from "./components/accordion.js";
 import { avatarHandler } from "./components/avatar.js";
 import { menuHandler, contextMenuHandler } from "./components/menu.js";
-import { modalHandler, modalTriggerHandler } from "./components/modal.js";
+import { overlayHandler, overlayTriggerHandler } from "./components/overlay.js";
 import { popoverHandler } from "./components/popover.js";
 import { sliderHandler } from "./components/slider.js";
 import { tabsHandler } from "./components/tabs.js";
@@ -29,8 +29,9 @@ const componentRegistry = {
     ".avatar": avatarHandler,
     ".menu": menuHandler,
     "[data-target-context-menu]": contextMenuHandler,
-    ".modal": modalHandler,
-    "[data-target-modal]": modalTriggerHandler,
+    ".modal": overlayHandler,
+    ".sheet": overlayHandler,
+    "[data-target-overlay]": overlayTriggerHandler,
     ".popover": popoverHandler,
     ":not(input).slider": sliderHandler,
     ".tabs": tabsHandler,

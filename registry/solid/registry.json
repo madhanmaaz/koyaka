@@ -1,6 +1,6 @@
 {
     "framework": "solid",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "dependencies": [
         "solid-js"
     ],
@@ -263,6 +263,18 @@
                 "components/select/select.tsx",
                 "helpers/types.ts",
                 "helpers/utils.ts"
+            ],
+            "dependencies": []
+        },
+        "sheet": {
+            "files": [
+                "components/sheet/index.ts",
+                "components/sheet/sheet.tsx",
+                "helpers/escapeStack.ts",
+                "helpers/events.ts",
+                "helpers/types.ts",
+                "helpers/utils.ts",
+                "shared/overlayEngine.tsx"
             ],
             "dependencies": []
         },

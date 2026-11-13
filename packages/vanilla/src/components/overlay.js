@@ -11,29 +11,28 @@ import { addEvent } from "../helpers/events.js";
 import { createCleanup } from "../helpers/cleanup.js";
 import { OverlayEngine } from "../shared/overlayEngine.js";
 
-export function modalHandler(modal) {
-    setAttribute(modal, "role", "dialog");
-    setAttribute(modal, "aria-modal", "true");
+export function overlayHandler(overlay) {
+    setAttribute(overlay, "role", "dialog");
+    setAttribute(overlay, "aria-modal", "true");
 
     const engine = new OverlayEngine({
-        name: "modal",
-        root: modal,
+        root: overlay,
     });
 
-    setKoyaka(modal, {
+    setKoyaka(overlay, {
         toggle: (force) => engine.toggle(force),
         open: () => engine.mount(),
         close: () => engine.unmount(),
         isOpen: () => engine.mounted,
     });
 
-    if (classListContains(modal, "active")) {
+    if (classListContains(overlay, "active")) {
         engine.mount({ silent: true });
     }
 }
 
-export function modalTriggerHandler(trigger) {
-    const selector = getDataset(trigger, "targetModal");
+export function overlayTriggerHandler(trigger) {
+    const selector = getDataset(trigger, "targetOverlay");
     if (!selector) return;
 
     const onCleanup = createCleanup(trigger);
@@ -45,10 +44,10 @@ export function modalTriggerHandler(trigger) {
                 e.preventDefault();
             }
 
-            const modal = querySelector(selector);
-            if (!modal) return;
+            const overlay = querySelector(selector);
+            if (!overlay) return;
 
-            getKoyaka(modal).toggle?.();
+            getKoyaka(overlay).toggle?.();
         }),
     );
 }

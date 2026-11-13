@@ -1,21 +1,25 @@
 import {
     createContext,
     createSignal,
+    createUniqueId,
     Show,
     useContext,
     splitProps,
-    JSX,
 } from "solid-js";
+import type { JSX } from "solid-js";
 import { cn } from "../../helpers/utils";
 import type { Placement, Size, Color } from "../../helpers/types";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type TabsVariant = "surface" | "split" | "underline";
+type TabsVariant = "surface" | "split";
+type TabsListVariant = "underline";
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
 interface TabsContextValue {
+    /** Unique per <Tabs>, so ids don't clash when a page has several. */
+    id: string;
     active: () => string;
     setActive: (value: string) => void;
 }
@@ -28,6 +32,15 @@ function useTabs(): TabsContextValue {
         throw new Error("<Tabs.*> must be used inside <Tabs>");
     }
     return ctx;
+}
+
+// keeps the user's own handler working (function or [handler, data])
+function callHandler<E extends Event>(handler: unknown, e: E) {
+    if (typeof handler === "function") {
+        handler(e);
+    } else if (Array.isArray(handler)) {
+        handler[0](handler[1], e);
+    }
 }
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -43,7 +56,13 @@ interface TabsProps extends JSX.HTMLAttributes<HTMLDivElement> {
     color?: Color;
 }
 
-type TabsListProps = JSX.HTMLAttributes<HTMLDivElement>;
+interface TabsListProps extends JSX.HTMLAttributes<HTMLDivElement> {
+    variant?: TabsListVariant;
+    /** Let the triggers wrap onto several lines. */
+    multiline?: boolean;
+    /** Triggers share the width of the list equally. */
+    fill?: boolean;
+}
 
 interface TabsTriggerProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
     value: string;
@@ -70,6 +89,8 @@ function Tabs(props: TabsProps) {
         "children",
     ]);
 
+    const id = createUniqueId();
+
     const isControlled = () => local.value !== undefined;
     const [internalActive, setInternalActive] = createSignal(
         local.defaultValue ?? "",
@@ -84,8 +105,9 @@ function Tabs(props: TabsProps) {
     }
 
     return (
-        <TabsContext.Provider value={{ active, setActive }}>
+        <TabsContext.Provider value={{ id, active, setActive }}>
             <div
+                {...others}
                 class={cn(
                     "tabs",
                     local.variant,
@@ -94,7 +116,6 @@ function Tabs(props: TabsProps) {
                     local.color,
                     local.class,
                 )}
-                {...others}
             >
                 {local.children}
             </div>
@@ -103,10 +124,27 @@ function Tabs(props: TabsProps) {
 }
 
 function TabsList(props: TabsListProps) {
-    const [local, others] = splitProps(props, ["class", "children"]);
+    const [local, others] = splitProps(props, [
+        "variant",
+        "multiline",
+        "fill",
+
+        "class",
+        "children",
+    ]);
 
     return (
-        <div role="tablist" class={cn("tabs-list", local.class)} {...others}>
+        <div
+            role="tablist"
+            {...others}
+            class={cn(
+                "tabs-list",
+                local.variant,
+                local.multiline ? "multiline" : undefined,
+                local.fill ? "fill" : undefined,
+                local.class,
+            )}
+        >
             {local.children}
         </div>
     );
@@ -116,29 +154,38 @@ function TabsTrigger(props: TabsTriggerProps) {
     const [local, others] = splitProps(props, [
         "value",
         "disabled",
+        "onClick",
 
         "class",
         "children",
     ]);
 
-    const { active, setActive } = useTabs();
+    const { id, active, setActive } = useTabs();
     const isActive = () => active() === local.value;
 
-    const triggerId = `tabs-trigger-${local.value}`;
-    const panelId = `tabs-panel-${local.value}`;
+    const triggerId = () => `${id}-trigger-${local.value}`;
+    const panelId = () => `${id}-panel-${local.value}`;
 
     return (
         <button
-            id={triggerId}
             type="button"
+            {...others}
+            id={triggerId()}
             role="tab"
             aria-selected={isActive()}
-            aria-controls={panelId}
+            aria-controls={panelId()}
             disabled={local.disabled}
-            class={cn("tabs-trigger", local.class)}
-            classList={{ active: isActive() }}
-            onClick={() => !local.disabled && setActive(local.value)}
-            {...others}
+            class={cn(
+                "tabs-trigger",
+                isActive() ? "active" : undefined,
+                local.class,
+            )}
+            onClick={(e) => {
+                callHandler(local.onClick, e);
+                if (!e.defaultPrevented && !local.disabled) {
+                    setActive(local.value);
+                }
+            }}
         >
             {local.children}
         </button>
@@ -147,21 +194,20 @@ function TabsTrigger(props: TabsTriggerProps) {
 
 function TabsContent(props: TabsContentProps) {
     const [local, others] = splitProps(props, ["value", "class", "children"]);
-    const { active } = useTabs();
+    const { id, active } = useTabs();
 
-    const triggerId = `tabs-trigger-${local.value}`;
-    const panelId = `tabs-panel-${local.value}`;
+    const triggerId = () => `${id}-trigger-${local.value}`;
+    const panelId = () => `${id}-panel-${local.value}`;
 
     return (
         <Show when={active() === local.value}>
             <div
-                id={panelId}
-                role="tabpanel"
                 tabIndex={0}
-                aria-labelledby={triggerId}
-                class={cn("tabs-content", local.class)}
-                classList={{ active: active() === local.value }}
                 {...others}
+                id={panelId()}
+                role="tabpanel"
+                aria-labelledby={triggerId()}
+                class={cn("tabs-content", "active", local.class)}
             >
                 {local.children}
             </div>
@@ -179,4 +225,5 @@ export type {
     TabsTriggerProps,
     TabsContentProps,
     TabsVariant,
+    TabsListVariant,
 };

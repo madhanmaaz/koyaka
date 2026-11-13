@@ -1,0 +1,128 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/mixins";
+@use "../shared/overlay";
+
+// Width of a left/right sheet. Top and bottom sheets size to their content.
+$sheet-sizes: (
+    "sm": 18rem,
+    "md": 24rem,
+    "lg": 32rem,
+    "xl": 40rem,
+);
+
+.sheet {
+    @extend %overlay;
+
+    --overlay-speed: 0.3s;
+
+    --sheet-max-w: 24rem;
+    --sheet-max-h: 100dvh;
+
+    // slide-from offsets (default: left)
+    --sheet-x: -100%;
+    --sheet-y: 0%;
+
+    padding: 0;
+    align-items: stretch;
+    justify-content: flex-start;
+
+    > .overlay-content {
+        max-width: var(--sheet-max-w);
+        max-height: var(--sheet-max-h);
+
+        border-right: vars.$border;
+        background-color: hsl(#{vars.$theme-bg-200});
+
+        will-change: transform;
+    }
+
+    &.active > .overlay-content {
+        animation: sheet-in var(--overlay-speed) var(--overlay-ease-out)
+            forwards;
+    }
+
+    &.closing > .overlay-content {
+        animation: sheet-out var(--overlay-speed) var(--overlay-ease-in)
+            forwards;
+    }
+
+    // sizes
+    @include mixins.each-size($sheet-sizes) using ($name, $width) {
+        > .overlay-content {
+            --sheet-max-w: #{$width};
+        }
+    }
+
+    // placement
+    &.right {
+        --sheet-x: 100%;
+
+        justify-content: flex-end;
+
+        > .overlay-content {
+            border-right: none;
+            border-left: vars.$border;
+        }
+    }
+
+    &.top,
+    &.bottom {
+        --sheet-x: 0%;
+
+        > .overlay-content {
+            --sheet-max-w: 100%;
+
+            border-right: none;
+        }
+    }
+
+    &.top {
+        --sheet-y: -100%;
+
+        align-items: flex-start;
+
+        > .overlay-content {
+            border-bottom: vars.$border;
+        }
+    }
+
+    &.bottom {
+        --sheet-y: 100%;
+
+        align-items: flex-end;
+
+        > .overlay-content {
+            border-top: vars.$border;
+        }
+    }
+
+    // reduced motion: keep the fade, drop the slide
+    @include mixins.reduced-motion {
+        --overlay-motion: 0;
+    }
+}
+
+// animations
+@keyframes sheet-in {
+    from {
+        transform: translate(
+            calc(var(--sheet-x) * var(--overlay-motion)),
+            calc(var(--sheet-y) * var(--overlay-motion))
+        );
+    }
+    to {
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes sheet-out {
+    from {
+        transform: translate(0, 0);
+    }
+    to {
+        transform: translate(
+            calc(var(--sheet-x) * var(--overlay-motion)),
+            calc(var(--sheet-y) * var(--overlay-motion))
+        );
+    }
+}

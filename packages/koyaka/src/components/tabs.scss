@@ -145,13 +145,11 @@ $tabs-sizes: (
         flex-direction: column-reverse;
     }
 
-    // variant: underline
-    &.underline {
-        .tabs-list {
-            border-block-end: vars.$border;
-            border-radius: 0;
-            padding-inline: 0;
-        }
+    // list variant: underline  (.tabs-list.underline)
+    .tabs-list.underline {
+        border-block-end: vars.$border;
+        border-radius: 0;
+        padding-inline: 0;
 
         .tabs-trigger.active {
             --tabs-trigger-bg: #{vars.$transparent};
@@ -178,32 +176,32 @@ $tabs-sizes: (
         .tabs-trigger.active::before {
             opacity: 1;
         }
+    }
 
-        &.left .tabs-list {
-            border: none;
-            border-inline-end: vars.$border;
+    &.left .tabs-list.underline {
+        border: none;
+        border-inline-end: vars.$border;
 
-            padding-block: 0;
-            padding-inline: fn.space(1);
-        }
+        padding-block: 0;
+        padding-inline: fn.space(1);
 
-        &.left .tabs-trigger::before {
+        .tabs-trigger::before {
             inset-block-start: 0;
             inset-inline-start: calc(100% + #{vars.$border-width});
 
             width: 2px;
             height: 100%;
         }
+    }
 
-        &.right .tabs-list {
-            border: none;
-            border-inline-start: vars.$border;
+    &.right .tabs-list.underline {
+        border: none;
+        border-inline-start: vars.$border;
 
-            padding-block: 0;
-            padding-inline: fn.space(1);
-        }
+        padding-block: 0;
+        padding-inline: fn.space(1);
 
-        &.right .tabs-trigger::before {
+        .tabs-trigger::before {
             inset-block-start: 0;
             inset-inline-start: auto;
             inset-inline-end: calc(100% + #{vars.$border-width});
@@ -211,13 +209,13 @@ $tabs-sizes: (
             width: 2px;
             height: 100%;
         }
+    }
 
-        &.bottom .tabs-list {
-            border: none;
-            border-block-start: vars.$border;
-        }
+    &.bottom .tabs-list.underline {
+        border: none;
+        border-block-start: vars.$border;
 
-        &.bottom .tabs-trigger::before {
+        .tabs-trigger::before {
             inset-block-start: auto;
             inset-block-end: calc(100% + #{vars.$border-width});
         }
@@ -281,78 +279,16 @@ $tabs-sizes: (
         }
     }
 
-    // filled triggers
-    &.w-full .tabs-trigger {
+    // list variant: fill  (.tabs-list.fill) triggers share the list width equally
+    .tabs-list.fill .tabs-trigger {
         flex: 1;
         justify-content: center;
     }
 
-    // multiline
-    &.multiline .tabs-list {
+    // list variant: multiline  (.tabs-list.multiline)
+    .tabs-list.multiline {
         flex-wrap: wrap;
         overflow-x: hidden;
-    }
-
-    // variant: dock
-    &.dock {
-        gap: 0;
-
-        .tabs-list {
-            gap: 0;
-            border: 0;
-            padding: 0;
-            border-radius: 0;
-            background-color: hsl(vars.$theme-bg-200);
-        }
-
-        .tabs-trigger {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            gap: fn.space(2);
-
-            padding: var(--tabs-trigger-py) var(--tabs-trigger-px);
-            font-weight: 400;
-            font-size: calc(var(--tabs-trigger-fs) - 0.125rem);
-            border-radius: 0;
-            cursor: pointer;
-        }
-
-        .tabs-trigger:hover {
-            --tabs-trigger-bg: #{vars.$transparent};
-        }
-
-        .tabs-trigger.active {
-            --tabs-trigger-bg: #{vars.$transparent};
-            --tabs-trigger-fg: #{vars.$theme-fg};
-        }
-
-        .tabs-trigger .icon {
-            width: auto;
-            height: auto;
-            padding: var(--tabs-trigger-py) var(--tabs-trigger-px);
-            border: vars.$border-width solid transparent;
-            font-size: var(--tabs-trigger-fs);
-            border-radius: vars.$box-radius;
-            transition:
-                background-color 0.15s ease,
-                border-color 0.15s ease,
-                color 0.15s ease;
-        }
-
-        .tabs-trigger:hover .icon {
-            background-color: hsl(#{vars.$theme-fg} / 0.04);
-        }
-
-        .tabs-trigger.active .icon {
-            color: hsl(var(--tabs-clr, #{vars.$theme-fg}));
-            background-color: hsl(vars.$theme-bg-300);
-            border-color: hsl(vars.$border-color);
-        }
-
-        .tabs-content {
-            border: none;
-        }
     }
 
     // sizes
@@ -365,8 +301,7 @@ $tabs-sizes: (
 
     @include mixins.reduced-motion {
         &-trigger,
-        &-trigger::before,
-        &-trigger .icon {
+        &-trigger::before {
             transition: none;
         }
     }

@@ -1,7 +1,7 @@
 {
     "name": "koyaka-vanilla",
     "version": "0.0.2",
-    "description": "Koyaka vanilla -Javascript support for koyaka.",
+    "description": "Koyaka vanilla - Javascript support for koyaka.",
     "license": "MIT",
     "funding": "https://github.com/madhanmaaz/koyaka?sponsor=1",
     "repository": {

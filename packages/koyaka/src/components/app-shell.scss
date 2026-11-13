@@ -2,6 +2,36 @@
 @use "../abstracts/functions" as fn;
 @use "../abstracts/mixins";
 
+// shared hidden state of a pane: collapses to zero width and takes no space
+@mixin pane-hidden {
+    width: 0;
+    opacity: 0;
+    padding: 0 !important;
+    overflow: hidden;
+    pointer-events: none;
+    visibility: hidden;
+
+    // visibility flips after the width animation finishes
+    transition:
+        width var(--app-shell-speed) ease,
+        opacity var(--app-shell-speed) ease,
+        margin var(--app-shell-speed) ease,
+        padding var(--app-shell-speed) ease,
+        visibility 0s linear var(--app-shell-speed);
+
+    // cancel the flex gap so no empty strip is left behind
+    &:first-child {
+        margin-inline-end: calc(var(--app-shell-gap) * -1);
+    }
+
+    &:last-child {
+        margin-inline-start: calc(var(--app-shell-gap) * -1);
+    }
+}
+
+// Pane states:
+//   .collapsed  hidden at every screen size
+//   .active     shown below the lg breakpoint, where panes hide by default
 .app-shell {
     --app-shell-header-h: 3.5rem;
     --app-shell-gap: #{fn.space(2)};
@@ -50,9 +80,9 @@
     }
 
     // fixed-height shell: main and pane scroll on their own
-    // (:not(.none) keeps .none's overflow: hidden from being overridden)
+    // (:not(.collapsed) keeps .collapsed's overflow: hidden from being overridden)
     &:not(.sticky) &-main,
-    &:not(.sticky) &-pane:not(.none) {
+    &:not(.sticky) &-pane:not(.collapsed) {
         min-height: 0;
         overflow-y: auto;
     }
@@ -67,29 +97,15 @@
             margin var(--app-shell-speed) ease,
             padding var(--app-shell-speed) ease;
 
-        &.none {
-            width: 0;
-            opacity: 0;
-            padding: 0;
-            overflow: hidden;
-            pointer-events: none;
-            visibility: hidden;
+        // hidden at every size
+        &.collapsed {
+            @include pane-hidden;
+        }
 
-            // visibility flips after the width animation finishes
-            transition:
-                width var(--app-shell-speed) ease,
-                opacity var(--app-shell-speed) ease,
-                margin var(--app-shell-speed) ease,
-                padding var(--app-shell-speed) ease,
-                visibility 0s linear var(--app-shell-speed);
-
-            // cancel the flex gap so no empty strip is left behind
-            &:first-child {
-                margin-inline-end: calc(var(--app-shell-gap) * -1);
-            }
-
-            &:last-child {
-                margin-inline-start: calc(var(--app-shell-gap) * -1);
+        // hidden by default below lg, add .active to show it
+        @include mixins.breakpoint-down("lg") {
+            &:not(.active) {
+                @include pane-hidden;
             }
         }
     }
@@ -116,14 +132,14 @@
             height: var(--app-shell-pane-h);
         }
 
-        .app-shell-pane:not(.none) {
+        .app-shell-pane:not(.collapsed) {
             overflow-y: auto;
         }
     }
 
     @include mixins.reduced-motion {
         .app-shell-pane,
-        .app-shell-pane.none {
+        .app-shell-pane.collapsed {
             transition: none;
         }
     }
